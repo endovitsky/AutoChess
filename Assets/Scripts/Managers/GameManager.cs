@@ -2,10 +2,16 @@
 
 namespace Managers
 {
+    [RequireComponent(typeof(GameObjectsManager))]
     public class GameManager : MonoBehaviour
     {
         // static instance of GameManager which allows it to be accessed by any other script 
         public static GameManager Instance;
+
+        public GameObjectsManager GameObjectsManager
+        {
+            get { return this.gameObject.GetComponent<GameObjectsManager>(); }
+        }
 
         private void Awake()
         {
@@ -29,8 +35,7 @@ namespace Managers
 
         private void Initialize()
         {
-
-            // 
+            GameObjectsManager.Initialize();
         }
     }
 }
