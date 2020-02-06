@@ -1,16 +1,36 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class GameManager : MonoBehaviour {
+namespace Managers
+{
+    public class GameManager : MonoBehaviour
+    {
+        // static instance of GameManager which allows it to be accessed by any other script 
+        public static GameManager Instance;
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+        private void Awake()
+        {
+            if (Instance == null)
+            {
+                Instance = this;
+
+                DontDestroyOnLoad(gameObject); // sets this to not be destroyed when reloading scene 
+            }
+            else
+            {
+                if (Instance != this)
+                {
+                    // this enforces our singleton pattern, meaning there can only ever be one instance of a GameManager 
+                    Destroy(gameObject);
+                }
+            }
+
+            Initialize();
+        }
+
+        private void Initialize()
+        {
+
+            // 
+        }
+    }
 }
