@@ -20,6 +20,7 @@ namespace Managers
         }
 
         public ChessBoardConfigurationService ChessBoardConfigurationService;
+        public GameStateService GameStateService;
 
         private void Awake()
         {
@@ -44,8 +45,10 @@ namespace Managers
         private void Initialize()
         {
             ChessBoardConfigurationService = new ChessBoardConfigurationService();
+            GameStateService = new GameStateService();
 
             ChessBoardConfigurationService.Initialize();
+            GameStateService.Initialize();
             // GameObjectsManager need ChessBoardConfigurationService
             GameObjectsManager.Initialize();
             UserInterfaceManager.Initialize();
