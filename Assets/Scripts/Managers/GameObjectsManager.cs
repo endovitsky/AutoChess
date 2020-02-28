@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Extensions;
+﻿using GameObjects;
 using UnityEngine;
 
 namespace Managers
@@ -7,33 +6,20 @@ namespace Managers
     public class GameObjectsManager : MonoBehaviour
     {
         [SerializeField]
-        private int _height = 6;
-        [SerializeField]
-        private int _width = 8;
-        [SerializeField]
-        private Transform _cellPrefab;
+        private ChessBoard _chessBoardPrefab;
 
-        private List<List<Transform>> _cells = new List<List<Transform>>();
+        private ChessBoard _chessBoardInstance;
 
         public void Initialize()
         {
-            for (var x = 0; x < _width; x++)
-            {
-                _cells.Add(new List<Transform>());
+            _chessBoardInstance = Instantiate(_chessBoardPrefab, this.gameObject.transform);
 
-                for (var y = 0; y < _height; y++)
-                {
-                    var instance = Instantiate(_cellPrefab, this.gameObject.transform);
-                    instance.gameObject.transform.position = new Vector3(x, y);
+            var size = _chessBoardInstance._squarePrefab.gameObject.GetComponent<SpriteRenderer>().bounds.size;
+            _chessBoardInstance.gameObject.transform.localPosition = new Vector3(
+                _chessBoardInstance.gameObject.transform.localPosition.x - _chessBoardInstance._width / 2 + size.x / 2,
+                _chessBoardInstance.gameObject.transform.localPosition.y - _chessBoardInstance._height / 2 + size.y / 2);
 
-                    var size = instance.gameObject.GetComponent<SpriteRenderer>().GetSize();
-                    instance.gameObject.transform.position = new Vector3(
-                        instance.gameObject.transform.position.x - _width / 2 + size.x/2,
-                        instance.gameObject.transform.position.y - _height / 2 + size.y/2);
-
-                    _cells[x].Add(instance);
-                }
-            }
+            _chessBoardInstance.Initialize();
         }
     }
 }
