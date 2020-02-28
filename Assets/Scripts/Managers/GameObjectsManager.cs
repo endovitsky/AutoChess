@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Extensions;
 using UnityEngine;
 
 namespace Managers
@@ -23,7 +24,12 @@ namespace Managers
                 for (var y = 0; y < _height; y++)
                 {
                     var instance = Instantiate(_cellPrefab, this.gameObject.transform);
-                    instance.transform.position = new Vector3(x, y);
+                    instance.gameObject.transform.position = new Vector3(x, y);
+
+                    var size = instance.gameObject.GetComponent<SpriteRenderer>().GetSize();
+                    instance.gameObject.transform.position = new Vector3(
+                        instance.gameObject.transform.position.x - _width / 2 + size.x/2,
+                        instance.gameObject.transform.position.y - _height / 2 + size.y/2);
 
                     _cells[x].Add(instance);
                 }
