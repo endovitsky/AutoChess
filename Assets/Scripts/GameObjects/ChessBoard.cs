@@ -20,7 +20,7 @@ namespace GameObjects
                 for (var y = 0; y < GameManager.Instance.ChessBoardConfigurationService.Height; y++)
                 {
                     var instance = Instantiate(_squarePrefab, this.gameObject.transform);
-                    instance.gameObject.transform.localPosition = new Vector3(x, y);
+                    instance.gameObject.transform.localPosition = new Vector3(x + 1, y + 1);
 
                     _squares[x].Add(instance);
                 }
