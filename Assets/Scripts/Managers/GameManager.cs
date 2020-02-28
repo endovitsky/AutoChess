@@ -4,6 +4,7 @@ using UnityEngine;
 namespace Managers
 {
     [RequireComponent(typeof(GameObjectsManager))]
+    [RequireComponent(typeof(UserInterfaceManager))]
     public class GameManager : MonoBehaviour
     {
         // static instance of GameManager which allows it to be accessed by any other script 
@@ -12,6 +13,10 @@ namespace Managers
         public GameObjectsManager GameObjectsManager
         {
             get { return this.gameObject.GetComponent<GameObjectsManager>(); }
+        }
+        public UserInterfaceManager UserInterfaceManager
+        {
+            get { return this.gameObject.GetComponent<UserInterfaceManager>(); }
         }
 
         public ChessBoardConfigurationService ChessBoardConfigurationService;
@@ -43,6 +48,7 @@ namespace Managers
             ChessBoardConfigurationService.Initialize();
             // GameObjectsManager need ChessBoardConfigurationService
             GameObjectsManager.Initialize();
+            UserInterfaceManager.Initialize();
         }
     }
 }
