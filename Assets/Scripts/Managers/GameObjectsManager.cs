@@ -16,8 +16,8 @@ namespace Managers
 
             var size = _chessBoardInstance._squarePrefab.gameObject.GetComponent<SpriteRenderer>().bounds.size;
             _chessBoardInstance.gameObject.transform.localPosition = new Vector3(
-                _chessBoardInstance.gameObject.transform.localPosition.x - _chessBoardInstance._width / 2 + size.x / 2,
-                _chessBoardInstance.gameObject.transform.localPosition.y - _chessBoardInstance._height / 2 + size.y / 2);
+                _chessBoardInstance.gameObject.transform.localPosition.x - GameManager.Instance.ChessBoardConfigurationService.Width / 2 + size.x / 2,
+                _chessBoardInstance.gameObject.transform.localPosition.y - GameManager.Instance.ChessBoardConfigurationService.Height / 2 + size.y / 2);
 
             _chessBoardInstance.Initialize();
         }

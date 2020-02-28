@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Services;
+using UnityEngine;
 
 namespace Managers
 {
@@ -12,6 +13,8 @@ namespace Managers
         {
             get { return this.gameObject.GetComponent<GameObjectsManager>(); }
         }
+
+        public ChessBoardConfigurationService ChessBoardConfigurationService;
 
         private void Awake()
         {
@@ -35,6 +38,10 @@ namespace Managers
 
         private void Initialize()
         {
+            ChessBoardConfigurationService = new ChessBoardConfigurationService();
+
+            ChessBoardConfigurationService.Initialize();
+            // GameObjectsManager need ChessBoardConfigurationService
             GameObjectsManager.Initialize();
         }
     }
