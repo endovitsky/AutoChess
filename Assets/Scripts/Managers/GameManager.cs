@@ -8,6 +8,8 @@ namespace Managers
     [RequireComponent(typeof(GameObjectsManager))]
     [RequireComponent(typeof(UserInterfaceManager))]
     [RequireComponent(typeof(TexturesResourcesManager))]
+    [RequireComponent(typeof(ChessBoardFactory))]
+    [RequireComponent(typeof(SquareFactory))]
     [RequireComponent(typeof(UnitFactory))]
     public class GameManager : MonoBehaviour
     {
