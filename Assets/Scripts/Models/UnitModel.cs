@@ -1,4 +1,6 @@
 ﻿using System;
+using UnityEngine;
+using Views;
 
 namespace Models
 {
@@ -30,12 +32,15 @@ namespace Models
 
         public string TeamName { get; private set; }
 
+        public SquareView SquareView { get; private set; }
+
         public float _health;
 
-        public UnitModel(float health, string teamName)
+        public UnitModel(float health, string teamName, SquareView squareView)
         {
             Health = health;
             TeamName = teamName;
+            SquareView = squareView;
         }
 
         public void TakeDamage(float amount)

@@ -53,5 +53,11 @@ namespace Services
                 }
             };
         }
+
+        // TODO: move to more correct place
+        public List<UnitModel> GetAliveUnitModelsForTeam(string teamName)
+        {
+            return _aliveUnitModels[teamName];
+        }
     }
 }

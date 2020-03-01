@@ -22,7 +22,7 @@ namespace Factories
             }
         }
 
-        public void TrySpawnUnit(Transform square)
+        public void TrySpawnUnit(SquareView squareView)
         {
             var teamName = "";
             UnitView instance = null;
@@ -30,24 +30,24 @@ namespace Factories
             var rightBorderPositionX = GameManager.Instance.ChessBoardConfigurationService.Width;
             var leftBorderPositionX = 0;
 
-            if (square.localPosition.x - leftBorderPositionX <=
+            if (squareView.gameObject.transform.localPosition.x - leftBorderPositionX <=
                 GameManager.Instance.UnitsSpawningConfigurationService.StepFromLeft) // near the left border
             {
                 teamName = "Blue";
 
                 if (GameManager.Instance.UnitsCountService.IsCanSpawnUnitForTeam(teamName))
                 {
-                    instance = Instantiate(_unitViewPrefab, square.gameObject.transform);
+                    instance = Instantiate(_unitViewPrefab, squareView.gameObject.transform);
                 }
             }
-            if (rightBorderPositionX - square.localPosition.x <
+            if (rightBorderPositionX - squareView.gameObject.transform.localPosition.x <
                 GameManager.Instance.UnitsSpawningConfigurationService.StepFromRight) // near the right border
             {
                 teamName = "Red";
 
                 if (GameManager.Instance.UnitsCountService.IsCanSpawnUnitForTeam(teamName))
                 {
-                    instance = Instantiate(_unitViewPrefab, square.gameObject.transform);
+                    instance = Instantiate(_unitViewPrefab, squareView.gameObject.transform);
                 }
             }
 
@@ -56,7 +56,10 @@ namespace Factories
                 return;
             }
 
-            instance.Initialize(new UnitModel(GameManager.Instance.UnitConfigurationService.InitialHealth, teamName));
+            instance.Initialize(new UnitModel(
+                GameManager.Instance.UnitConfigurationService.InitialHealth, 
+                teamName,
+                squareView));
 
             _teamUnitViewInstances[teamName].Add(instance);
             GameManager.Instance.UnitsCountService.IncreaseUnitsCountForTeam(teamName);

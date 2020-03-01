@@ -1,37 +1,38 @@
 ﻿using System.Collections.Generic;
 using Managers;
 using UnityEngine;
+using Views;
 
 namespace Factories
 {
     public class SquareFactory : MonoBehaviour
     {
         [SerializeField]
-        private Transform _squarePrefab;
+        private SquareView _squarePrefab;
 
         public Vector3 SquareSize
         {
             get { return _squarePrefab.gameObject.GetComponent<SpriteRenderer>().bounds.size; }
         }
 
-        private List<List<Transform>> _squareInstances = new List<List<Transform>>();
+        public List<List<SquareView>> SquareInstances = new List<List<SquareView>>();
 
         public void InstantiateSquares(Transform parent)
         {
             for (var indexX = 0; indexX < GameManager.Instance.ChessBoardConfigurationService.Width; indexX++)
             {
-                _squareInstances.Add(new List<Transform>());
+                SquareInstances.Add(new List<SquareView>());
 
                 for (var indexY = 0; indexY < GameManager.Instance.ChessBoardConfigurationService.Height; indexY++)
                 {
                     var instance = InstantiateSquare(parent, indexX, indexY);
 
-                    _squareInstances[indexX].Add(instance);
+                    SquareInstances[indexX].Add(instance);
                 }
             }
         }
 
-        private Transform InstantiateSquare(Transform parent, int indexX, int indexY)
+        private SquareView InstantiateSquare(Transform parent, int indexX, int indexY)
         {
             var instance = Instantiate(_squarePrefab, parent);
             var position = new Vector3(indexX + 1, indexY + 1); // from indexes to coordinates

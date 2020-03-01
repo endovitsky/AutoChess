@@ -101,7 +101,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 744bc2dadbe74de09db3665a87fc5314, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _squarePrefab: {fileID: 950189480501631478, guid: 082073d313325ec4fae3203dc8072831,
+  _squarePrefab: {fileID: 3408831514253061190, guid: 082073d313325ec4fae3203dc8072831,
     type: 3}
 --- !u!114 &6092860517007476883
 MonoBehaviour:
