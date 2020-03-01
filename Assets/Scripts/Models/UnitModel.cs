@@ -28,11 +28,14 @@ namespace Models
             }
         }
 
+        public string TeamName { get; private set; }
+
         public float _health;
 
-        public UnitModel(float health)
+        public UnitModel(float health, string teamName)
         {
             Health = health;
+            TeamName = teamName;
         }
 
         public void TakeDamage(float amount)

@@ -56,7 +56,7 @@ namespace Factories
                 return;
             }
 
-            instance.Initialize(new UnitModel(GameManager.Instance.UnitConfigurationService.InitialHealth));
+            instance.Initialize(new UnitModel(GameManager.Instance.UnitConfigurationService.InitialHealth, teamName));
 
             _teamUnitViewInstances[teamName].Add(instance);
             GameManager.Instance.UnitsCountService.IncreaseUnitsCountForTeam(teamName);

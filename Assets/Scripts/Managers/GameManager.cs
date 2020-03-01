@@ -91,6 +91,8 @@ namespace Managers
             UnitConfigurationService.Initialize();
             GameStateService.Initialize();
             UnitsCountService.Initialize();
+            // UnitsStateMonitoringService need TeamsConfigurationService
+            UnitsStateMonitoringService.Initialize();
             // GameObjectsManager need ChessBoardConfigurationService
             GameObjectsManager.Initialize();
             UserInterfaceManager.Initialize();

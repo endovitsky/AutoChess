@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Managers;
 using Models;
 using Debug = UnityEngine.Debug;
 
@@ -10,7 +11,16 @@ namespace Services
         public Action<int> AliveUnitModelsCountChanged = delegate { };
 
         private List<UnitModel> _unitModels = new List<UnitModel>();
-        private List<UnitModel> _aliveUnitModels = new List<UnitModel>();
+        private Dictionary<string, List<UnitModel>> _aliveUnitModels = new Dictionary<string, List<UnitModel>>();
+
+        public void Initialize()
+        {
+            // by default the count of alive units for all teams is 0
+            foreach (var teamName in GameManager.Instance.TeamsConfigurationService.TeamNames)
+            {
+                _aliveUnitModels.Add(teamName, new List<UnitModel>());
+            }
+        }
 
         public void RegisterUnitForStateMonitoring(UnitModel unitModel)
         {
@@ -18,11 +28,12 @@ namespace Services
 
             if (!unitModel.IsDead)
             {
-                var previousCount = _aliveUnitModels.Count;
+                var previousCount = _aliveUnitModels[unitModel.TeamName].Count;
+                _aliveUnitModels[unitModel.TeamName].Add(unitModel);
+                var currentCount = _aliveUnitModels[unitModel.TeamName].Count;
 
-                _aliveUnitModels.Add(unitModel);
-
-                Debug.Log($"Alive unit models count changed from {previousCount} to {_aliveUnitModels.Count}");
+                Debug.Log($"Alive unit models count of {unitModel.TeamName} team " +
+                          $"changed from {previousCount} to {currentCount}");
 
                 AliveUnitModelsCountChanged.Invoke(_aliveUnitModels.Count);
             }
@@ -31,11 +42,12 @@ namespace Services
             {
                 if (unitModel.IsDead)
                 {
-                    var previousCount = _aliveUnitModels.Count;
+                    var previousCount = _aliveUnitModels[unitModel.TeamName].Count;
+                    _aliveUnitModels[unitModel.TeamName].Remove(unitModel);
+                    var currentCount = _aliveUnitModels[unitModel.TeamName].Count;
 
-                    _aliveUnitModels.Remove(unitModel);
-
-                    Debug.Log($"Alive unit models count changed from {previousCount} to {_aliveUnitModels.Count}");
+                    Debug.Log($"Alive unit models count of {unitModel.TeamName} team " +
+                              $"changed from {previousCount} to {currentCount}");
 
                     AliveUnitModelsCountChanged.Invoke(_aliveUnitModels.Count);
                 }
