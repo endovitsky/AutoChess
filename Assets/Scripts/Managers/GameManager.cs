@@ -1,10 +1,12 @@
-﻿using Services;
+﻿using Factories;
+using Services;
 using UnityEngine;
 
 namespace Managers
 {
     [RequireComponent(typeof(GameObjectsManager))]
     [RequireComponent(typeof(UserInterfaceManager))]
+    [RequireComponent(typeof(UnitFactory))]
     public class GameManager : MonoBehaviour
     {
         // static instance of GameManager which allows it to be accessed by any other script 
@@ -17,6 +19,11 @@ namespace Managers
         public UserInterfaceManager UserInterfaceManager
         {
             get { return this.gameObject.GetComponent<UserInterfaceManager>(); }
+        }
+
+        public UnitFactory UnitFactory
+        {
+            get { return this.gameObject.GetComponent<UnitFactory>(); }
         }
 
         public ChessBoardConfigurationService ChessBoardConfigurationService;
