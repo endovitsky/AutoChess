@@ -59,8 +59,8 @@ namespace Factories
             instance.Initialize(new UnitModel(GameManager.Instance.UnitConfigurationService.InitialHealth));
 
             _teamUnitViewInstances[teamName].Add(instance);
-
             GameManager.Instance.UnitsCountService.IncreaseUnitsCountForTeam(teamName);
+            GameManager.Instance.UnitsStateMonitoringService.RegisterUnitForStateMonitoring(instance.UnitModel);
 
             instance.gameObject.GetComponent<SpriteRenderer>().sprite =
                 GameManager.Instance.TexturesResourcesManager.Get("Units", teamName);

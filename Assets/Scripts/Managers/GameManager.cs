@@ -48,6 +48,7 @@ namespace Managers
         public UnitConfigurationService UnitConfigurationService;
         public GameStateService GameStateService;
         public UnitsCountService UnitsCountService;
+        public UnitsStateMonitoringService UnitsStateMonitoringService;
 
         private void Awake()
         {
@@ -79,6 +80,7 @@ namespace Managers
             // UnitsCountService need TeamsConfigurationService
             // UnitsCountService need UnitsSpawningConfigurationService
             UnitsCountService = new UnitsCountService();
+            UnitsStateMonitoringService = new UnitsStateMonitoringService();
 
             TeamsConfigurationService.Initialize();
             // UnitFactory need TeamsConfigurationService
