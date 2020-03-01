@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 114235794925385538}
   - component: {fileID: 448955366780803586}
   - component: {fileID: 7413481381478784792}
+  - component: {fileID: 1311624103344605622}
   - component: {fileID: 6092860517007476883}
   m_Layer: 0
   m_Name: GameManager
@@ -58,8 +59,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e7a88b1df58f0ef46815f04715c06415, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _chessBoardPrefab: {fileID: -5662394287260000611, guid: 6ceb1c712cf441d49ad75c9f32e1cf88,
-    type: 3}
 --- !u!114 &7413481381478784792
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -73,6 +72,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _startBattleWindowPrefab: {fileID: 3077453458501881746, guid: c8ac967bad6e84b44afb605d7599b84c,
+    type: 3}
+--- !u!114 &1311624103344605622
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1013237973650642}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d10b165816146cca8b2f8c115b33aaa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _chessBoardPrefab: {fileID: -5662394287260000611, guid: 6ceb1c712cf441d49ad75c9f32e1cf88,
     type: 3}
 --- !u!114 &6092860517007476883
 MonoBehaviour:

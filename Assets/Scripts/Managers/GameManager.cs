@@ -25,6 +25,10 @@ namespace Managers
         {
             get { return this.gameObject.GetComponent<UnitFactory>(); }
         }
+        public ChessBoardFactory ChessBoardFactory
+        {
+            get { return this.gameObject.GetComponent<ChessBoardFactory>(); }
+        }
 
         public ChessBoardConfigurationService ChessBoardConfigurationService;
         public UnitsSpawningConfigurationService UnitsSpawningConfigurationService;
