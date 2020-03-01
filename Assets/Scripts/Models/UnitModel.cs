@@ -20,6 +20,14 @@ namespace Models
             }
         }
 
+        public bool IsDead
+        {
+            get
+            {
+                return Health <= 0;
+            }
+        }
+
         public float _health;
 
         public UnitModel(float health)
