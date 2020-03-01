@@ -8,23 +8,22 @@ namespace Services
     {
         private static System.Random _random = new Random();
 
-        public Dictionary<string, int> AllowedTeamNamesUnitsCounts = new Dictionary<string, int>();
-
-        public Dictionary<string, int> TeamNamesUnitsCounts = new Dictionary<string, int>();
+        private Dictionary<string, int> _allowedTeamNamesUnitsCounts = new Dictionary<string, int>();
+        private Dictionary<string, int> _teamNamesUnitsCounts = new Dictionary<string, int>();
 
         public void Initialize()
         {
             // by default the count of units for all teams is 0
             foreach (var teamName in GameManager.Instance.TeamsConfigurationService.TeamNames)
             {
-                TeamNamesUnitsCounts.Add(teamName, 0);
+                _teamNamesUnitsCounts.Add(teamName, 0);
             }
 
             foreach (var teamName in GameManager.Instance.TeamsConfigurationService.TeamNames)
             {
                 var unitsCount = GetRandomUnitsCount();
 
-                AllowedTeamNamesUnitsCounts.Add(teamName, unitsCount);
+                _allowedTeamNamesUnitsCounts.Add(teamName, unitsCount);
             }
         }
 
@@ -39,9 +38,14 @@ namespace Services
 
         public bool IsCanSpawnUnitForTeam(string teamName)
         {
-            var result = TeamNamesUnitsCounts[teamName] < AllowedTeamNamesUnitsCounts[teamName];
+            var result = _teamNamesUnitsCounts[teamName] < _allowedTeamNamesUnitsCounts[teamName];
 
             return result;
+        }
+
+        public void IncreaseUnitsCountForTeam(string teamName)
+        {
+            _teamNamesUnitsCounts[teamName]++;
         }
     }
 }

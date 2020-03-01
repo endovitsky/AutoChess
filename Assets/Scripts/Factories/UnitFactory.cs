@@ -60,7 +60,7 @@ namespace Factories
 
             _teamUnitViewInstances[teamName].Add(instance);
 
-            GameManager.Instance.UnitsCountService.TeamNamesUnitsCounts[teamName]++;
+            GameManager.Instance.UnitsCountService.IncreaseUnitsCountForTeam(teamName);
 
             instance.gameObject.GetComponent<SpriteRenderer>().sprite =
                 GameManager.Instance.TexturesResourcesManager.Get("Units", teamName);
