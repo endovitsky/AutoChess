@@ -46,6 +46,7 @@ namespace Managers
         public UnitsSpawningConfigurationService UnitsSpawningConfigurationService;
         public TeamsConfigurationService TeamsConfigurationService;
         public GameStateService GameStateService;
+        public UnitsCountService UnitsCountService;
 
         private void Awake()
         {
@@ -73,11 +74,18 @@ namespace Managers
             UnitsSpawningConfigurationService = new UnitsSpawningConfigurationService();
             TeamsConfigurationService = new TeamsConfigurationService();
             GameStateService = new GameStateService();
+            // UnitsCountService need TeamsConfigurationService
+            // UnitsCountService need UnitsSpawningConfigurationService
+            UnitsCountService = new UnitsCountService();
+
+            TeamsConfigurationService.Initialize();
+            // UnitFactory need TeamsConfigurationService
+            UnitFactory.Initialize();
 
             ChessBoardConfigurationService.Initialize();
             UnitsSpawningConfigurationService.Initialize();
-            TeamsConfigurationService.Initialize();
             GameStateService.Initialize();
+            UnitsCountService.Initialize();
             // GameObjectsManager need ChessBoardConfigurationService
             GameObjectsManager.Initialize();
             UserInterfaceManager.Initialize();

@@ -9,12 +9,21 @@ namespace Factories
         [SerializeField]
         private Transform _unitPrefab;
 
-        private List<Transform> _redTeamUnitInstances = new List<Transform>();
-        private List<Transform> _blueTeamUnitInstances = new List<Transform>();
+        private Dictionary<string, List<Transform>> _teamUnitInstances = new Dictionary<string, List<Transform>>();
+
+        public void Initialize()
+        {
+            // by default there is no instances of units of any team
+            foreach (var teamName in GameManager.Instance.TeamsConfigurationService.TeamNames)
+            {
+                _teamUnitInstances.Add(teamName, new List<Transform>());
+            }
+        }
 
         public void TrySpawnUnit(Transform square)
         {
             var teamName = "";
+            Transform instance = null;
 
             var rightBorderPositionX = GameManager.Instance.ChessBoardConfigurationService.Width;
             var leftBorderPositionX = 0;
@@ -22,27 +31,35 @@ namespace Factories
             if (square.localPosition.x - leftBorderPositionX <=
                 GameManager.Instance.UnitsSpawningConfigurationService.StepFromLeft) // near the left border
             {
-                var instance = Instantiate(_unitPrefab, square.gameObject.transform);
-
                 teamName = "Blue";
 
-                instance.gameObject.GetComponent<SpriteRenderer>().sprite = 
-                    GameManager.Instance.TexturesResourcesManager.Get("Units", teamName);
-
-                _blueTeamUnitInstances.Add(instance);
+                if (GameManager.Instance.UnitsCountService.IsCanSpawnUnitForTeam(teamName))
+                {
+                    instance = Instantiate(_unitPrefab, square.gameObject.transform);
+                }
             }
             if (rightBorderPositionX - square.localPosition.x <
                 GameManager.Instance.UnitsSpawningConfigurationService.StepFromRight) // near the right border
             {
-                var instance = Instantiate(_unitPrefab, square.gameObject.transform);
-
                 teamName = "Red";
 
-                instance.gameObject.GetComponent<SpriteRenderer>().sprite =
-                    GameManager.Instance.TexturesResourcesManager.Get("Units", teamName);
-
-                _redTeamUnitInstances.Add(instance);
+                if (GameManager.Instance.UnitsCountService.IsCanSpawnUnitForTeam(teamName))
+                {
+                    instance = Instantiate(_unitPrefab, square.gameObject.transform);
+                }
             }
+
+            if (instance == null)
+            {
+                return;
+            }
+
+            _teamUnitInstances[teamName].Add(instance);
+
+            GameManager.Instance.UnitsCountService.TeamNamesUnitsCounts[teamName]++;
+
+            instance.gameObject.GetComponent<SpriteRenderer>().sprite =
+                GameManager.Instance.TexturesResourcesManager.Get("Units", teamName);
         }
     }
 }
