@@ -21,13 +21,17 @@ namespace Managers
             get { return this.gameObject.GetComponent<UserInterfaceManager>(); }
         }
 
-        public UnitFactory UnitFactory
-        {
-            get { return this.gameObject.GetComponent<UnitFactory>(); }
-        }
         public ChessBoardFactory ChessBoardFactory
         {
             get { return this.gameObject.GetComponent<ChessBoardFactory>(); }
+        }
+        public SquareFactory SquareFactory
+        {
+            get { return this.gameObject.GetComponent<SquareFactory>(); }
+        }
+        public UnitFactory UnitFactory
+        {
+            get { return this.gameObject.GetComponent<UnitFactory>(); }
         }
 
         public ChessBoardConfigurationService ChessBoardConfigurationService;

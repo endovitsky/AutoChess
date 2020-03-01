@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 448955366780803586}
   - component: {fileID: 7413481381478784792}
   - component: {fileID: 1311624103344605622}
+  - component: {fileID: 6071225738948367080}
   - component: {fileID: 6092860517007476883}
   m_Layer: 0
   m_Name: GameManager
@@ -86,6 +87,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _chessBoardPrefab: {fileID: -5662394287260000611, guid: 6ceb1c712cf441d49ad75c9f32e1cf88,
+    type: 3}
+--- !u!114 &6071225738948367080
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1013237973650642}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 744bc2dadbe74de09db3665a87fc5314, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _squarePrefab: {fileID: 950189480501631478, guid: 082073d313325ec4fae3203dc8072831,
     type: 3}
 --- !u!114 &6092860517007476883
 MonoBehaviour:
