@@ -1,29 +1,32 @@
 ﻿using System.Collections.Generic;
 using Managers;
+using Models;
+using Services;
 using UnityEngine;
+using Views;
 
 namespace Factories
 {
     public class UnitFactory : MonoBehaviour
     {
         [SerializeField]
-        private Transform _unitPrefab;
+        private UnitView _unitViewPrefab;
 
-        private Dictionary<string, List<Transform>> _teamUnitInstances = new Dictionary<string, List<Transform>>();
+        private Dictionary<string, List<UnitView>> _teamUnitViewInstances = new Dictionary<string, List<UnitView>>();
 
         public void Initialize()
         {
             // by default there is no instances of units of any team
             foreach (var teamName in GameManager.Instance.TeamsConfigurationService.TeamNames)
             {
-                _teamUnitInstances.Add(teamName, new List<Transform>());
+                _teamUnitViewInstances.Add(teamName, new List<UnitView>());
             }
         }
 
         public void TrySpawnUnit(Transform square)
         {
             var teamName = "";
-            Transform instance = null;
+            UnitView instance = null;
 
             var rightBorderPositionX = GameManager.Instance.ChessBoardConfigurationService.Width;
             var leftBorderPositionX = 0;
@@ -35,7 +38,7 @@ namespace Factories
 
                 if (GameManager.Instance.UnitsCountService.IsCanSpawnUnitForTeam(teamName))
                 {
-                    instance = Instantiate(_unitPrefab, square.gameObject.transform);
+                    instance = Instantiate(_unitViewPrefab, square.gameObject.transform);
                 }
             }
             if (rightBorderPositionX - square.localPosition.x <
@@ -45,7 +48,7 @@ namespace Factories
 
                 if (GameManager.Instance.UnitsCountService.IsCanSpawnUnitForTeam(teamName))
                 {
-                    instance = Instantiate(_unitPrefab, square.gameObject.transform);
+                    instance = Instantiate(_unitViewPrefab, square.gameObject.transform);
                 }
             }
 
@@ -54,7 +57,9 @@ namespace Factories
                 return;
             }
 
-            _teamUnitInstances[teamName].Add(instance);
+            instance.Initialize(new UnitModel(GameManager.Instance.UnitConfigurationService.InitialHealth));
+
+            _teamUnitViewInstances[teamName].Add(instance);
 
             GameManager.Instance.UnitsCountService.TeamNamesUnitsCounts[teamName]++;
 
