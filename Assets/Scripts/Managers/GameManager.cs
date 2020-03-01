@@ -45,6 +45,7 @@ namespace Managers
         public ChessBoardConfigurationService ChessBoardConfigurationService;
         public UnitsSpawningConfigurationService UnitsSpawningConfigurationService;
         public TeamsConfigurationService TeamsConfigurationService;
+        public UnitConfigurationService UnitConfigurationService;
         public GameStateService GameStateService;
         public UnitsCountService UnitsCountService;
 
@@ -73,6 +74,7 @@ namespace Managers
             ChessBoardConfigurationService = new ChessBoardConfigurationService();
             UnitsSpawningConfigurationService = new UnitsSpawningConfigurationService();
             TeamsConfigurationService = new TeamsConfigurationService();
+            UnitConfigurationService = new UnitConfigurationService();
             GameStateService = new GameStateService();
             // UnitsCountService need TeamsConfigurationService
             // UnitsCountService need UnitsSpawningConfigurationService
@@ -84,6 +86,7 @@ namespace Managers
 
             ChessBoardConfigurationService.Initialize();
             UnitsSpawningConfigurationService.Initialize();
+            UnitConfigurationService.Initialize();
             GameStateService.Initialize();
             UnitsCountService.Initialize();
             // GameObjectsManager need ChessBoardConfigurationService
