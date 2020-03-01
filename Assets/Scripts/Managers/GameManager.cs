@@ -1,4 +1,5 @@
 ﻿using Factories;
+using Managers.ResourcesManagers;
 using Services;
 using UnityEngine;
 
@@ -6,6 +7,7 @@ namespace Managers
 {
     [RequireComponent(typeof(GameObjectsManager))]
     [RequireComponent(typeof(UserInterfaceManager))]
+    [RequireComponent(typeof(TexturesResourcesManager))]
     [RequireComponent(typeof(UnitFactory))]
     public class GameManager : MonoBehaviour
     {
@@ -19,6 +21,10 @@ namespace Managers
         public UserInterfaceManager UserInterfaceManager
         {
             get { return this.gameObject.GetComponent<UserInterfaceManager>(); }
+        }
+        public TexturesResourcesManager TexturesResourcesManager
+        {
+            get { return this.gameObject.GetComponent<TexturesResourcesManager>(); }
         }
 
         public ChessBoardFactory ChessBoardFactory
@@ -73,6 +79,7 @@ namespace Managers
             // GameObjectsManager need ChessBoardConfigurationService
             GameObjectsManager.Initialize();
             UserInterfaceManager.Initialize();
+            TexturesResourcesManager.Initialize("Textures");
         }
     }
 }
