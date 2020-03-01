@@ -2,8 +2,8 @@
 {
     public class ChessBoardConfigurationService
     {
-        public int Height { get; private set; } = 6;
-        public int Width { get; private set; } = 8;
+        public int Height { get; private set; }
+        public int Width { get; private set; }
 
         public void Initialize()
         {
