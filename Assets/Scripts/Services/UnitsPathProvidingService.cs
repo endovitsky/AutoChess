@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Managers;
 using Views;
@@ -7,6 +8,8 @@ namespace Services
 {
     public class UnitsPathProvidingService
     {
+        public Action<List<List<SquareView>>> PathsChanged = delegate { };
+
         public List<List<SquareView>> Paths { get; } = new List<List<SquareView>>();
 
         public void Initialize()
@@ -36,6 +39,8 @@ namespace Services
                         GameManager.Instance.PathFindingService.FindClosestPath(unitModel.SquareView, enemySquareViews);
 
                     Paths.Add(pathToClosestEnemy);
+
+                    PathsChanged.Invoke(Paths);
                 }
             }
         }

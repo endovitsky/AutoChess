@@ -7,6 +7,7 @@ namespace Models
     public class UnitModel
     {
         public Action<float> HealthChanged = delegate { };
+        public Action<SquareView> SquareViewChanged = delegate { };
 
         public float Health
         {
@@ -32,9 +33,22 @@ namespace Models
 
         public string TeamName { get; private set; }
 
-        public SquareView SquareView { get; private set; }
+        public SquareView SquareView
+        {
+            get
+            {
+                return _squareView;
+            }
+            private set
+            {
+                _squareView = value;
 
-        public float _health;
+                SquareViewChanged.Invoke(_squareView);
+            }
+        }
+
+        private float _health;
+        private SquareView _squareView;
 
         public UnitModel(float health, string teamName, SquareView squareView)
         {
@@ -46,6 +60,11 @@ namespace Models
         public void TakeDamage(float amount)
         {
             Health -= amount;
+        }
+
+        public void Move(SquareView squareView)
+        {
+            SquareView = squareView;
         }
     }
 }

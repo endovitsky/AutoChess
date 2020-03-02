@@ -51,6 +51,7 @@ namespace Managers
         public UnitsStateMonitoringService UnitsStateMonitoringService;
         public PathFindingService PathFindingService;
         public UnitsPathProvidingService UnitsPathProvidingService;
+        public UnitsMovingService UnitsMovingService;
 
         private void Awake()
         {
@@ -85,6 +86,7 @@ namespace Managers
             UnitsStateMonitoringService = new UnitsStateMonitoringService();
             PathFindingService = new PathFindingService();
             UnitsPathProvidingService = new UnitsPathProvidingService();
+            UnitsMovingService = new UnitsMovingService();
 
             TeamsConfigurationService.Initialize();
             // UnitFactory need TeamsConfigurationService
@@ -99,6 +101,8 @@ namespace Managers
             UnitsStateMonitoringService.Initialize();
             // UnitsPathProvidingService need SelectedGameStateChanged
             UnitsPathProvidingService.Initialize();
+            // UnitsMovingService need UnitsPathProvidingService
+            UnitsMovingService.Initialize();
             // GameObjectsManager need ChessBoardConfigurationService
             GameObjectsManager.Initialize();
             UserInterfaceManager.Initialize();
