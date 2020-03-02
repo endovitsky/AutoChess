@@ -1,9 +1,9 @@
 ﻿using Managers;
 using UnityEngine;
 
-namespace GameObjects
+namespace Views
 {
-    public class ChessBoard : MonoBehaviour
+    public class ChessBoardView : MonoBehaviour
     {
         public void Initialize()
         {
