@@ -30,7 +30,7 @@ namespace Services
             return result;
         }
 
-        private List<SquareView> GetPath(SquareView startSquareView, SquareView targetSquareView)
+        public List<SquareView> GetPath(SquareView startSquareView, SquareView targetSquareView)
         {
             var path = new List<SquareView>();
 
@@ -42,7 +42,8 @@ namespace Services
             // add start square to path
             path.Add(startSquareView);
 
-            path.AddRange(GetPathRecursively(startSquareView, targetSquareView));
+            var additionalPath = GetPathRecursively(startSquareView, targetSquareView);
+            path.AddRange(additionalPath);
 
             _passedSquareViews.Clear();
 
@@ -53,29 +54,30 @@ namespace Services
         {
             var path = new List<SquareView>();
 
-            var squareViews = GetNeighbors(startSquareView);
-            foreach (var squareView in squareViews)
+            var neighbors = GetNeighbors(startSquareView);
+            neighbors = neighbors.Except(_passedSquareViews).ToList();
+            foreach (var neighbor in neighbors)
             {
                 // already visited this square - nothing to do here
-                if (_passedSquareViews.Contains(squareView))
+                if (_passedSquareViews.Contains(neighbor))
                 {
                     continue;
                 }
 
                 // mark square as visited
-                _passedSquareViews.Add(squareView);
+                _passedSquareViews.Add(neighbor);
 
                 // add square to path
-                path.Add(squareView);
+                path.Add(neighbor);
 
                 // this is target square - path is found - return it
-                if (squareView == targetSquareView)
+                if (neighbor == targetSquareView)
                 {
                     return path;
                 }
 
                 // this is not a target square - go forth
-                var additionalPath = GetPath(squareView, targetSquareView);
+                var additionalPath = GetPath(neighbor, targetSquareView);
                 path.AddRange(additionalPath);
             }
 
@@ -99,11 +101,13 @@ namespace Services
 
             foreach (var vector2 in coordinates)
             {
-                if (GameManager.Instance.SquareFactory.SquareInstances.Count > (int) vector2.x &&
-                    GameManager.Instance.SquareFactory.SquareInstances[(int) vector2.x].Count > (int) vector2.y)
+                var x = System.Math.Abs((int)vector2.x);
+                var y = System.Math.Abs((int)vector2.y);
+
+                if (GameManager.Instance.SquareFactory.SquareInstances.Count > x &&
+                    GameManager.Instance.SquareFactory.SquareInstances[x].Count > y)
                 {
-                    var squareInstance =
-                        GameManager.Instance.SquareFactory.SquareInstances[(int) vector2.x][(int) vector2.y];
+                    var squareInstance = GameManager.Instance.SquareFactory.SquareInstances[x][y];
                     result.Add(squareInstance);
                 }
             }

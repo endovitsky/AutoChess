@@ -46,7 +46,9 @@ namespace Services
             var redUnitModels = GameManager.Instance.UnitsStateMonitoringService.GetAliveUnitModelsForTeam("Red").First();
             var blueUnitModels = GameManager.Instance.UnitsStateMonitoringService.GetAliveUnitModelsForTeam("Blue").First();
 
-            GameManager.Instance.PathFindingService.FindPath(redUnitModels.SquareView, blueUnitModels.SquareView);
+            var path = GameManager.Instance.PathFindingService.GetPath(
+                redUnitModels.SquareView, 
+                blueUnitModels.SquareView);
         }
 
         public enum GameState

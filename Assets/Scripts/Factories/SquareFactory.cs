@@ -35,7 +35,7 @@ namespace Factories
         private SquareView InstantiateSquare(Transform parent, int indexX, int indexY)
         {
             var instance = Instantiate(_squarePrefab, parent);
-            var position = new Vector3(indexX + 1, indexY + 1); // from indexes to coordinates
+            var position = new Vector3(indexX, indexY);
             instance.gameObject.transform.localPosition = position;
             return instance;
         }

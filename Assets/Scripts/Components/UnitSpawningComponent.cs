@@ -11,8 +11,8 @@ namespace Components
         {
             //GameManager.Instance.UnitFactory.TryInstantiateUnit(this.gameObject.GetComponent<SquareView>());
 
-            var bluePosition = new Vector3(1, 1, 0);
-            var redPosition = new Vector3(3, 3, 0);
+            var bluePosition = new Vector3(0, 0, 0);
+            var redPosition = new Vector3(2, 2, 0);
 
             if (this.gameObject.transform.localPosition == bluePosition)
             {
