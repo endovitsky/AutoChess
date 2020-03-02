@@ -104,6 +104,7 @@ namespace Managers
             UnitsStateMonitoringService.Initialize();
             // UnitsPathProvidingService need SelectedGameStateChanged
             UnitsPathProvidingService.Initialize();
+            // UnitsMovingService need TimerService
             // UnitsMovingService need UnitsPathProvidingService
             UnitsMovingService.Initialize();
             // GameObjectsManager need ChessBoardConfigurationService

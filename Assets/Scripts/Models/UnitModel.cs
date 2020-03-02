@@ -41,6 +41,13 @@ namespace Models
             }
             private set
             {
+                if (_squareView != null &&
+                    value != null)
+                {
+                    Debug.Log($"Unit moved from square with coordinates {_squareView.Position.x}:{_squareView.Position.y}" +
+                              $" to square with coordinates {value.Position.x}:{value.Position.y}");
+                }
+
                 _squareView = value;
 
                 SquareViewChanged.Invoke(_squareView);

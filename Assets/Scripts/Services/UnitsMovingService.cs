@@ -1,6 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Linq;
 using Managers;
-using Views;
 
 namespace Services
 {
@@ -8,16 +7,25 @@ namespace Services
     {
         public void Initialize()
         {
-            GameManager.Instance.UnitsPathProvidingService.PathsChanged += OnPathsChanged;
+            GameManager.Instance.TimerService.SecondsPassedCountChanged += OnSecondsPassedCountChanged;
         }
 
-        private void OnPathsChanged(List<List<SquareView>> paths)
+        private void OnSecondsPassedCountChanged(int secondsPassedCount)
         {
-            foreach (var path in paths)
+            if (GameManager.Instance.GameStateService.SelectedGameState != GameStateService.GameState.Started)
             {
-                var unitView = path[0].UnitView;
-                var squareView = path[1];
-                unitView.UnitModel.Move(squareView);
+                return;
+            }
+
+            foreach (var teamName in GameManager.Instance.TeamsConfigurationService.TeamNames)
+            {
+                foreach (var unitModel in GameManager.Instance.UnitsStateMonitoringService.GetAliveUnitModelsForTeam(teamName))
+                {
+                    var path = GameManager.Instance.UnitsPathProvidingService.Paths.First(x => x.Key == unitModel);
+
+                    var squareView = path.Value[1];
+                    unitModel.Move(squareView);
+                }
             }
         }
     }
