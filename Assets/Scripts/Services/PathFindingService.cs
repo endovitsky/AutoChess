@@ -69,6 +69,32 @@ namespace Services
             return path;
         }
 
+        public List<SquareView> FindClosestPath(SquareView startSquareView, List<SquareView> targetSquareViews)
+        {
+            var paths = new List<List<SquareView>>();
+            foreach (var targetSquareView in targetSquareViews)
+            {
+                var path = GameManager.Instance.PathFindingService.FindPath(
+                    startSquareView,
+                    targetSquareView);
+
+                paths.Add(path);
+            }
+
+            var pathDistances = new Dictionary<List<SquareView>, int>();
+            foreach (var path in paths)
+            {
+                var distance = GetDistance(path);
+                pathDistances.Add(path, distance);
+            }
+
+            pathDistances = pathDistances.OrderBy(x => x.Value).
+                ToDictionary(x => x.Key, x => x.Value);
+            var closestPath = pathDistances.First();
+
+            return closestPath.Key;
+        }
+
         private List<SquareView> RetracePath(SquareView startSquareView, SquareView endSquareView)
         {
             var path = new List<SquareView>();
@@ -85,7 +111,23 @@ namespace Services
             return path;
         }
 
-        private int GetDistance(SquareView squareView1, SquareView squareView2)
+        public int GetDistance(List<SquareView> path)
+        {
+            var result = 0;
+
+            for (var index = 0; index < path.Count - 1; index++)
+            {
+                var squareView1 = path[index];
+                var squareView2 = path[index + 1];
+                var distance = GetDistance(squareView1, squareView2);
+
+                result += distance;
+            }
+
+            return result;
+        }
+
+        public int GetDistance(SquareView squareView1, SquareView squareView2)
         {
             var distance = 0;
 
