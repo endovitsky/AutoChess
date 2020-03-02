@@ -22,42 +22,46 @@ namespace Factories
             }
         }
 
-        public void TrySpawnUnit(SquareView squareView)
+        public void TryInstantiateUnit(SquareView squareView)
         {
             var teamName = "";
-            UnitView instance = null;
 
             var rightBorderPositionX = GameManager.Instance.ChessBoardConfigurationService.Width;
             var leftBorderPositionX = 0;
+
+            if ((squareView.gameObject.transform.localPosition.x - leftBorderPositionX > GameManager.Instance.UnitsSpawningConfigurationService.StepFromLeft) &&
+                (rightBorderPositionX - squareView.gameObject.transform.localPosition.x >= GameManager.Instance.UnitsSpawningConfigurationService.StepFromRight))
+            {
+                return;
+            }
 
             if (squareView.gameObject.transform.localPosition.x - leftBorderPositionX <=
                 GameManager.Instance.UnitsSpawningConfigurationService.StepFromLeft) // near the left border
             {
                 teamName = "Blue";
-
-                if (GameManager.Instance.UnitsCountService.IsCanSpawnUnitForTeam(teamName))
-                {
-                    instance = Instantiate(_unitViewPrefab, squareView.gameObject.transform);
-                }
             }
             if (rightBorderPositionX - squareView.gameObject.transform.localPosition.x <
                 GameManager.Instance.UnitsSpawningConfigurationService.StepFromRight) // near the right border
             {
                 teamName = "Red";
-
-                if (GameManager.Instance.UnitsCountService.IsCanSpawnUnitForTeam(teamName))
-                {
-                    instance = Instantiate(_unitViewPrefab, squareView.gameObject.transform);
-                }
             }
 
-            if (instance == null)
+            if (!GameManager.Instance.UnitsCountService.IsCanSpawnUnitForTeam(teamName))
             {
                 return;
             }
 
+            InstantiateUnit(squareView, teamName);
+        }
+
+        public void InstantiateUnit(SquareView squareView, string teamName)
+        {
+            UnitView instance = null;
+
+            instance = Instantiate(_unitViewPrefab, squareView.gameObject.transform);
+
             instance.Initialize(new UnitModel(
-                GameManager.Instance.UnitConfigurationService.InitialHealth, 
+                GameManager.Instance.UnitConfigurationService.InitialHealth,
                 teamName,
                 squareView));
 

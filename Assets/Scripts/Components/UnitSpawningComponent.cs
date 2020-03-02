@@ -9,7 +9,7 @@ namespace Components
     {
         private void Start()
         {
-            GameManager.Instance.UnitFactory.TrySpawnUnit(this.gameObject.GetComponent<SquareView>());
+            GameManager.Instance.UnitFactory.TryInstantiateUnit(this.gameObject.GetComponent<SquareView>());
         }
     }
 }
