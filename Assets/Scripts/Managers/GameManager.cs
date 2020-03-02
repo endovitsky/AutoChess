@@ -42,6 +42,7 @@ namespace Managers
             get { return this.gameObject.GetComponent<UnitFactory>(); }
         }
 
+        public TimerService TimerService;
         public ChessBoardConfigurationService ChessBoardConfigurationService;
         public UnitsSpawningConfigurationService UnitsSpawningConfigurationService;
         public TeamsConfigurationService TeamsConfigurationService;
@@ -75,6 +76,7 @@ namespace Managers
 
         private void Initialize()
         {
+            TimerService = new TimerService();
             ChessBoardConfigurationService = new ChessBoardConfigurationService();
             UnitsSpawningConfigurationService = new UnitsSpawningConfigurationService();
             TeamsConfigurationService = new TeamsConfigurationService();
@@ -92,6 +94,7 @@ namespace Managers
             // UnitFactory need TeamsConfigurationService
             UnitFactory.Initialize();
 
+            TimerService.Initialize();
             ChessBoardConfigurationService.Initialize();
             UnitsSpawningConfigurationService.Initialize();
             UnitConfigurationService.Initialize();
