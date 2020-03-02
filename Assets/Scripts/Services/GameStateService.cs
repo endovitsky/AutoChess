@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using Managers;
 using UnityEngine;
 
 namespace Services
@@ -30,6 +32,21 @@ namespace Services
         public void Initialize()
         {
             SelectedGameState = GameState.NotStarted;
+
+            SelectedGameStateChanged += OnSelectedGameStateChanged;
+        }
+
+        private void OnSelectedGameStateChanged(GameState gameState)
+        {
+            if (gameState != GameState.Started)
+            {
+                return;
+            }
+
+            var redUnitModels = GameManager.Instance.UnitsStateMonitoringService.GetAliveUnitModelsForTeam("Red").First();
+            var blueUnitModels = GameManager.Instance.UnitsStateMonitoringService.GetAliveUnitModelsForTeam("Blue").First();
+
+            GameManager.Instance.PathFindingService.GetClosestUnitOfTeam(redUnitModels, blueUnitModels.TeamName);
         }
 
         public enum GameState
