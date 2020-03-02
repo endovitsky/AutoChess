@@ -32,23 +32,6 @@ namespace Services
         public void Initialize()
         {
             SelectedGameState = GameState.NotStarted;
-
-            SelectedGameStateChanged += OnSelectedGameStateChanged;
-        }
-
-        private void OnSelectedGameStateChanged(GameState gameState)
-        {
-            if (gameState != GameState.Started)
-            {
-                return;
-            }
-
-            var redUnitModels = GameManager.Instance.UnitsStateMonitoringService.GetAliveUnitModelsForTeam("Red").First();
-            var blueUnitModels = GameManager.Instance.UnitsStateMonitoringService.GetAliveUnitModelsForTeam("Blue").First();
-
-            var path = GameManager.Instance.PathFindingService.FindPath(
-                redUnitModels.SquareView,
-                blueUnitModels.SquareView);
         }
 
         public enum GameState
