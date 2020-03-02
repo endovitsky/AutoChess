@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using Managers;
 using Models;
@@ -86,7 +87,7 @@ namespace Services
             var result = new List<SquareView>();
 
             var coordinates = new List<Vector2>();
-            var position = squareView.gameObject.transform.position;
+            var position = squareView.gameObject.transform.localPosition;
             coordinates.Add(new Vector2(position.x - 1, position.y)); // left
             coordinates.Add(new Vector2(position.x + 1, position.y)); // right
             coordinates.Add(new Vector2(position.x, position.y - 1)); // bottom
@@ -98,9 +99,13 @@ namespace Services
 
             foreach (var vector2 in coordinates)
             {
-                var squareInstance =
-                    GameManager.Instance.SquareFactory.SquareInstances[(int) vector2.x][(int) vector2.y];
-                result.Add(squareInstance);
+                if (GameManager.Instance.SquareFactory.SquareInstances.Count > (int) vector2.x &&
+                    GameManager.Instance.SquareFactory.SquareInstances[(int) vector2.x].Count > (int) vector2.y)
+                {
+                    var squareInstance =
+                        GameManager.Instance.SquareFactory.SquareInstances[(int) vector2.x][(int) vector2.y];
+                    result.Add(squareInstance);
+                }
             }
 
             return result;
