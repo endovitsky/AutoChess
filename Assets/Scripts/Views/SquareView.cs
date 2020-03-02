@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Views
 {
@@ -6,9 +6,20 @@ namespace Views
     {
         public UnitView UnitView;
 
-        public void Initialize(UnitView unitView)
+        public Vector2 Position => this.gameObject.transform.localPosition;
+
+        public bool IsWalkable => UnitView == null;
+
+        public int gCost;
+        public int hCost;
+        public SquareView parent;
+
+        public int fCost
         {
-            _unitView = unitView;
+            get
+            {
+                return gCost + hCost;
+            }
         }
-    }
+	}
 }
