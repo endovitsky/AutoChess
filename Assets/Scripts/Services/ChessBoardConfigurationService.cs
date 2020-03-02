@@ -8,8 +8,8 @@
         public void Initialize()
         {
             // TODO: add receiving this data from json config file
-            Height = 6;
-            Width = 8;
+            Height = 3;
+            Width = 3;
         }
     }
 }
