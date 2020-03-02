@@ -57,10 +57,16 @@ namespace Services
             var pathToClosestEnemy =
                 GameManager.Instance.PathFindingService.FindClosestPath(unitModel.SquareView, enemySquareViews);
 
-            Paths[unitModel] = pathToClosestEnemy;
+            if (Paths.ContainsKey(unitModel)&&
+                pathToClosestEnemy != null)
+            {
+                Debug.Log($"Path for unit is changed from square with coordinates " +
+                          $"{Paths[unitModel][0].Position.x}:{Paths[unitModel][0].Position.y}" +
+                          $" to square with coordinates " +
+                          $"{pathToClosestEnemy[0].Position.x}:{pathToClosestEnemy[0].Position.y}");
+            }
 
-            Debug.Log($"Path changed for unit in square " +
-                      $"{pathToClosestEnemy[0].Position.x}:{pathToClosestEnemy[0].Position.y}");
+            Paths[unitModel] = pathToClosestEnemy;
 
             PathsChanged.Invoke(Paths);
         }

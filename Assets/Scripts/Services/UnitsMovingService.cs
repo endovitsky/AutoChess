@@ -21,9 +21,24 @@ namespace Services
             {
                 foreach (var unitModel in GameManager.Instance.UnitsStateMonitoringService.GetAliveUnitModelsForTeam(teamName))
                 {
-                    var path = GameManager.Instance.UnitsPathProvidingService.Paths.First(x => x.Key == unitModel);
+                    var path = GameManager.Instance.UnitsPathProvidingService.Paths.
+                        First(x => x.Key == unitModel).Value.ToList();
 
-                    var squareView = path.Value[1];
+                    // no next square to move
+                    if (path.Count < 2)
+                    {
+                        continue;
+                    }
+
+                    var squareView = path[1];
+
+                    var pathLength = GameManager.Instance.PathFindingService.GetDistance(path);
+                    // this unit is in attack range with his target - do not need to move anymore
+                    if (pathLength <= GameManager.Instance.UnitConfigurationService.AttackRange)
+                    {
+                        continue;
+                    }
+
                     unitModel.Move(squareView);
                 }
             }

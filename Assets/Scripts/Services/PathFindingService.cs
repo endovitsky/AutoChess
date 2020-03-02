@@ -127,7 +127,7 @@ namespace Services
             return result;
         }
 
-        public int GetDistance(SquareView squareView1, SquareView squareView2)
+        private int GetDistance(SquareView squareView1, SquareView squareView2)
         {
             var distance = 0;
 
