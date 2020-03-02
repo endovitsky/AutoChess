@@ -1,10 +1,10 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 namespace Views
 {
     public class SquareView : MonoBehaviour
     {
-        public UnitView _unitView;
+        public UnitView UnitView;
 
         public void Initialize(UnitView unitView)
         {

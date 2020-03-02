@@ -65,6 +65,8 @@ namespace Factories
                 teamName,
                 squareView));
 
+            squareView.UnitView = instance;
+
             _teamUnitViewInstances[teamName].Add(instance);
             GameManager.Instance.UnitsCountService.IncreaseUnitsCountForTeam(teamName);
             GameManager.Instance.UnitsStateMonitoringService.RegisterUnitForStateMonitoring(instance.UnitModel);
