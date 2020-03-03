@@ -7,6 +7,7 @@ namespace Models
     public class UnitModel
     {
         public Action<float> HealthChanged = delegate { };
+        //TODO: re-implement this to PositionChanged
         public Action<SquareView> SquareViewChanged = delegate { };
 
         public float Health
@@ -17,6 +18,15 @@ namespace Models
             }
             private set
             {
+                if (Math.Abs(value - _health) < 0.001f)
+                {
+                    return;
+                }
+
+                Debug.Log($"Unit({InitialPosition.x}:{InitialPosition.y}) " +
+                          $" health changed from {_health}" +
+                          $" to {value}");
+
                 _health = value;
 
                 HealthChanged.Invoke(_health);
@@ -33,6 +43,8 @@ namespace Models
         }
 
         public string TeamName { get; private set; }
+
+        public Vector2 InitialPosition { get; private set; }
 
         public SquareView SquareView
         {
@@ -78,6 +90,8 @@ namespace Models
 
             SquareView = squareView;
             UnitView = unitView;
+
+            InitialPosition = SquareView.Position;
         }
 
         public void Move(SquareView squareView)
