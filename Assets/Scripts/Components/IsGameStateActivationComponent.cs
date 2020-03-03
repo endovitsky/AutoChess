@@ -11,6 +11,7 @@ namespace Components
 
         private void Start()
         {
+            SelectedGameStateChanged(GameManager.Instance.GameStateService.SelectedGameState);
             GameManager.Instance.GameStateService.SelectedGameStateChanged += SelectedGameStateChanged;
         }
         private void OnDestroy()
