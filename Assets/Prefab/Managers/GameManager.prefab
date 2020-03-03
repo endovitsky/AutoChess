@@ -76,6 +76,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _startBattleWindowPrefab: {fileID: 3077453458501881746, guid: c8ac967bad6e84b44afb605d7599b84c,
     type: 3}
+  _gameOverWindowPrefab: {fileID: 6601578602450340863, guid: ebef01e72eb7cd7409ab60c923e9deb9,
+    type: 3}
 --- !u!114 &1311624103344605622
 MonoBehaviour:
   m_ObjectHideFlags: 0
