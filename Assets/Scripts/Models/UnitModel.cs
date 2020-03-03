@@ -22,6 +22,7 @@ namespace Models
                 HealthChanged.Invoke(_health);
             }
         }
+        public float AttackDamage { get; private set; }
 
         public bool IsDead
         {
@@ -63,28 +64,30 @@ namespace Models
                 SquareViewChanged.Invoke(_squareView);
             }
         }
-
         public UnitView UnitView;
 
         private float _health;
         private SquareView _squareView;
 
-        public UnitModel(float health, string teamName, SquareView squareView, UnitView unitView)
+        public UnitModel(float health, float attackDamage, string teamName, SquareView squareView, UnitView unitView)
         {
             Health = health;
+            AttackDamage = attackDamage;
+
             TeamName = teamName;
+
             SquareView = squareView;
             UnitView = unitView;
-        }
-
-        public void TakeDamage(float amount)
-        {
-            Health -= amount;
         }
 
         public void Move(SquareView squareView)
         {
             SquareView = squareView;
+        }
+
+        public void Attack(UnitModel unitModel)
+        {
+            unitModel.Health -= this.AttackDamage;
         }
     }
 }

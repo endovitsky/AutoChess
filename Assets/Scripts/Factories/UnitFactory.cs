@@ -61,6 +61,7 @@ namespace Factories
             instance = Instantiate(_unitViewPrefab, squareView.gameObject.transform);
 
             instance.Initialize(new UnitModel(
+                GameManager.Instance.UnitConfigurationService.AttackDamage,
                 GameManager.Instance.UnitConfigurationService.InitialHealth,
                 teamName,
                 squareView,
