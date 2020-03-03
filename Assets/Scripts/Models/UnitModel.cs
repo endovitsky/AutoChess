@@ -48,20 +48,33 @@ namespace Models
                               $" to square with coordinates {value.Position.x}:{value.Position.y}");
                 }
 
+                // need to update square too
+                if (_squareView != null)
+                {
+                    _squareView.UnitView = null;
+                }
+                if (value != null)
+                {
+                    value.UnitView = this.UnitView;
+                }
+
                 _squareView = value;
 
                 SquareViewChanged.Invoke(_squareView);
             }
         }
 
+        public UnitView UnitView;
+
         private float _health;
         private SquareView _squareView;
 
-        public UnitModel(float health, string teamName, SquareView squareView)
+        public UnitModel(float health, string teamName, SquareView squareView, UnitView unitView)
         {
             Health = health;
             TeamName = teamName;
             SquareView = squareView;
+            UnitView = unitView;
         }
 
         public void TakeDamage(float amount)

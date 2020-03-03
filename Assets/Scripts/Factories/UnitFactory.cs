@@ -63,7 +63,8 @@ namespace Factories
             instance.Initialize(new UnitModel(
                 GameManager.Instance.UnitConfigurationService.InitialHealth,
                 teamName,
-                squareView));
+                squareView,
+                instance));
 
             squareView.UnitView = instance;
 
