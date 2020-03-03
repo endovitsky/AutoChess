@@ -28,30 +28,46 @@ namespace Services
 
             RecalculatePaths();
 
-            // subscribe to movement of each unit to recalculate all paths
+            // subscribe to state changing of each unit to recalculate all paths
             // TODO: not optimal - fix it
-            foreach (var teamName in GameManager.Instance.TeamsConfigurationService.TeamNames)
+            foreach (var unitModel in GameManager.Instance.UnitsStateMonitoringService.UnitModels)
             {
-                var unitModels = GameManager.Instance.UnitsStateMonitoringService.GetAliveUnitModelsForTeam(teamName);
-                foreach (var unitModel in unitModels)
+                unitModel.SquareViewChanged += squareView =>
                 {
-                    unitModel.SquareViewChanged += squareView =>
+                    RecalculatePaths();
+                };
+                unitModel.HealthChanged += health =>
+                {
+                    if (unitModel.IsDead)
                     {
-                        RecalculatePaths();
-                    };
-                }
+                        // remove paths from dead units
+                        var pathFromDeadUnitModel = Paths.FirstOrDefault(x=>x.FromUnitModel == unitModel);
+                        if (pathFromDeadUnitModel == null)
+                        {
+                            //
+                        }
+                        Paths.Remove(pathFromDeadUnitModel);
+
+                        // remove destination point to dead units
+                        var pathsToDeadUnitModel = Paths.Where(x => x.ToUnitModel == unitModel).ToList();
+                        foreach (var pathToDeadUnitModel in pathsToDeadUnitModel)
+                        {
+                            pathToDeadUnitModel.ToUnitModel = null;
+                        }
+                    }
+                    // TODO: add reaction for not dead unit - resurrected
+
+                    RecalculatePaths();
+                };
             }
         }
 
         private void RecalculatePaths()
         {
-            foreach (var teamName in GameManager.Instance.TeamsConfigurationService.TeamNames)
+            var unitModels = GameManager.Instance.UnitsStateMonitoringService.AliveUnitModels;
+            foreach (var unitModel in unitModels)
             {
-                var unitModels = GameManager.Instance.UnitsStateMonitoringService.GetAliveUnitModelsForTeam(teamName);
-                foreach (var unitModel in unitModels)
-                {
-                    RecalculatePath(unitModel);
-                }
+                RecalculatePath(unitModel);
             }
         }
 
@@ -60,6 +76,11 @@ namespace Services
             var enemyUnitModels =
                 GameManager.Instance.UnitsStateMonitoringService.GetAliveEnemyUnitModelsForUnitModel(unitModel);
 
+            // no enemies
+            if (enemyUnitModels.Count == 0)
+            {
+                return;
+            }
 
             var pathToClosestEnemy = FindPathToClosestEnemy(unitModel, enemyUnitModels);
 
