@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Managers;
+using UnityEngine;
 using UnityEngine.UI;
 using Views;
 
@@ -40,7 +41,7 @@ namespace Components
 
             if (health <= 0)
             {
-                Destroy(_unitView.gameObject);
+                GameManager.Instance.UnitFactory.DestroyUnit(_unitView);
             }
         }
     }
