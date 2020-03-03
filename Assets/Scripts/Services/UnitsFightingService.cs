@@ -19,7 +19,8 @@ namespace Services
 
             foreach (var teamName in GameManager.Instance.TeamsConfigurationService.TeamNames)
             {
-                foreach (var unitModel in GameManager.Instance.UnitsStateMonitoringService.GetAliveUnitModelsForTeam(teamName))
+                var aliveUnitModelsForTeam = GameManager.Instance.UnitsStateMonitoringService.GetAliveUnitModelsForTeam(teamName);
+                foreach (var unitModel in aliveUnitModelsForTeam)
                 {
                     var path = GameManager.Instance.UnitsPathProvidingService.Paths.FirstOrDefault(x =>
                         x.FromUnitModel == unitModel);
