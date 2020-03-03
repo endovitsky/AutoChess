@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Managers;
 
-namespace Services
+namespace Services.Units
 {
     public class UnitsCountService
     {

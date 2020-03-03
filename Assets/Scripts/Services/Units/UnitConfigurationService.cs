@@ -1,4 +1,4 @@
-﻿namespace Services
+﻿namespace Services.Units
 {
     public class UnitConfigurationService
     {

@@ -5,7 +5,7 @@ using Managers;
 using Models;
 using Debug = UnityEngine.Debug;
 
-namespace Services
+namespace Services.Units
 {
     public class UnitsStateMonitoringService
     {

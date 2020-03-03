@@ -1,9 +1,9 @@
 ﻿using System.Linq;
 using Managers;
 
-namespace Services
+namespace Services.Units
 {
-    public class UnitsFightingService
+    public class UnitsMovingService
     {
         public void Initialize()
         {
@@ -19,8 +19,7 @@ namespace Services
 
             foreach (var teamName in GameManager.Instance.TeamsConfigurationService.TeamNames)
             {
-                var aliveUnitModelsForTeam = GameManager.Instance.UnitsStateMonitoringService.GetAliveUnitModelsForTeam(teamName);
-                foreach (var unitModel in aliveUnitModelsForTeam)
+                foreach (var unitModel in GameManager.Instance.UnitsStateMonitoringService.GetAliveUnitModelsForTeam(teamName))
                 {
                     var path = GameManager.Instance.UnitsPathProvidingService.Paths.FirstOrDefault(x =>
                         x.FromUnitModel == unitModel);
@@ -31,20 +30,21 @@ namespace Services
                         continue;
                     }
 
-                    // no target for this unit
-                    if (path.ToUnitModel == null)
+                    // no next square to move
+                    if (path.SquareViews.Count <= 0)
                     {
                         continue;
                     }
 
-                    // do not eat reached the target
-                    if (path.SquareViews.Count > GameManager.Instance.UnitConfigurationService.AttackRange)
+                    // reached stack range - no need to move anymore
+                    if (path.SquareViews.Count <= GameManager.Instance.UnitConfigurationService.AttackRange)
                     {
                         continue;
                     }
 
-                    var target = path.ToUnitModel;
-                    unitModel.Attack(target);
+                    var squareView = path.SquareViews[0];
+
+                    unitModel.Move(squareView);
                 }
             }
         }
