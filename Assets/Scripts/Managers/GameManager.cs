@@ -53,6 +53,7 @@ namespace Managers
         public GameStateService GameStateService;
         public UnitsCountService UnitsCountService;
         public UnitsStateMonitoringService UnitsStateMonitoringService;
+        public TeamsStateMonitoringService TeamsStateMonitoringService;
         public PathFindingService PathFindingService;
         public UnitsPathProvidingService UnitsPathProvidingService;
         public UnitsMovingService UnitsMovingService;
@@ -90,6 +91,7 @@ namespace Managers
             // UnitsCountService need UnitsSpawningConfigurationService
             UnitsCountService = new UnitsCountService();
             UnitsStateMonitoringService = new UnitsStateMonitoringService();
+            TeamsStateMonitoringService = new TeamsStateMonitoringService();
             PathFindingService = new PathFindingService();
             UnitsPathProvidingService = new UnitsPathProvidingService();
             UnitsMovingService = new UnitsMovingService();
@@ -107,6 +109,11 @@ namespace Managers
             UnitsCountService.Initialize();
             // UnitsStateMonitoringService need TeamsConfigurationService
             UnitsStateMonitoringService.Initialize();
+            // TeamsStateMonitoringService on Initialize need
+            //     UnitsStateMonitoringService
+            // TeamsStateMonitoringService need
+            //     TeamsConfigurationService
+            TeamsStateMonitoringService.Initialize();
             // UnitsPathProvidingService need SelectedGameStateChanged
             UnitsPathProvidingService.Initialize();
             // UnitsMovingService need TimerService
