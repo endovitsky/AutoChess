@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace Services
 {
@@ -10,6 +11,13 @@ namespace Services
         {
             // TODO: add receiving this data from json config file
             TeamNames = new List<string> {"Red", "Blue"};
+        }
+
+        public string GetEnemyTeamName(string teamName)
+        {
+            var enemyTeamName = TeamNames.First(x => x != teamName);
+
+            return enemyTeamName;
         }
     }
 }

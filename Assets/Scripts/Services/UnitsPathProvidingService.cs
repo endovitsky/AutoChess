@@ -10,9 +10,9 @@ namespace Services
 {
     public class UnitsPathProvidingService
     {
-        public Action<Dictionary<UnitModel, List<SquareView>>> PathsChanged = delegate { };
+        public Action<List<Path>> PathsChanged = delegate { };
 
-        public Dictionary<UnitModel, List<SquareView>> Paths { get; } = new Dictionary<UnitModel, List<SquareView>>();
+        public List<Path> Paths { get; private set; } = new List<Path>();
 
         public void Initialize()
         {
@@ -33,8 +33,7 @@ namespace Services
         {
             foreach (var teamName in GameManager.Instance.TeamsConfigurationService.TeamNames)
             {
-                var enemyTeamName = GameManager.Instance.TeamsConfigurationService.TeamNames.First(x => x != teamName);
-                var enemyUnitModels = GameManager.Instance.UnitsStateMonitoringService.GetAliveUnitModelsForTeam(enemyTeamName);
+                var enemyUnitModels = GameManager.Instance.UnitsStateMonitoringService.GetAliveEnemyUnitModelsForTeam(teamName);
 
                 var unitModels = GameManager.Instance.UnitsStateMonitoringService.GetAliveUnitModelsForTeam(teamName);
                 foreach (var unitModel in unitModels)
@@ -43,7 +42,19 @@ namespace Services
 
                     unitModel.SquareViewChanged += squareView =>
                     {
+                        // recalculate unit paths to enemies
                         RecalculatePath(unitModel, enemyUnitModels);
+
+                        // enemies have their own paths to this unit - recalculate them too
+                        var pathsFromEnemyUnitsToUnit = Paths.Where(x=>x.ToUnitModel == unitModel);
+                        foreach (var pathsFromEnemyUnitToUnit in pathsFromEnemyUnitsToUnit)
+                        {
+                            var enemyUnitModel = pathsFromEnemyUnitToUnit.FromUnitModel;
+
+                            var enemiesOfMyEnemy = GameManager.Instance.UnitsStateMonitoringService.GetAliveEnemyUnitModelsForUnitModel(enemyUnitModel);
+
+                            RecalculatePath(enemyUnitModel, enemiesOfMyEnemy);
+                        }
                     };
                 }
             }
@@ -51,24 +62,59 @@ namespace Services
 
         private void RecalculatePath(UnitModel unitModel, List<UnitModel> enemyUnitModels)
         {
+            var pathToClosestEnemy = FindPathToClosestEnemy(unitModel, enemyUnitModels);
+
+            var path = Paths.FirstOrDefault(x => x.FromUnitModel == pathToClosestEnemy.FromUnitModel && 
+                                                 x.ToUnitModel == pathToClosestEnemy.ToUnitModel);
+
+            //TODO: add path changed logging here
+
+            if (path!= null) // contains path for this pair of units - update path
+            {
+                path.SquareViews = pathToClosestEnemy.SquareViews;
+            }
+            else // do not contains path for this pair of units - add path
+            {
+                Paths.Add(pathToClosestEnemy);
+            }
+
+            PathsChanged.Invoke(Paths);
+        }
+
+        private Path FindPathToClosestEnemy(UnitModel unitModel, List<UnitModel> enemyUnitModels)
+        {
             var enemySquareViews = new List<SquareView>();
             enemyUnitModels.ForEach(x => enemySquareViews.Add(x.SquareView));
 
-            var pathToClosestEnemy =
-                GameManager.Instance.PathFindingService.FindClosestPath(unitModel.SquareView, enemySquareViews);
+            var closestPath = GameManager.Instance.PathFindingService.FindClosestPath(
+                unitModel.SquareView, enemySquareViews);
 
-            if (Paths.ContainsKey(unitModel)&&
-                pathToClosestEnemy != null)
+            var squareUnderUnit = closestPath[0];
+            var squareUnderEnemyUnit = closestPath[closestPath.Count - 1];
+            closestPath = closestPath.Where(x => x != squareUnderUnit).ToList();
+            closestPath = closestPath.Where(x => x != squareUnderEnemyUnit).ToList();
+            var unit = squareUnderUnit.UnitView.UnitModel;
+            var enemyUnit = squareUnderEnemyUnit.UnitView.UnitModel;
+
+            var pathToClosestEnemy = new Path(unit, enemyUnit, closestPath);
+
+            return pathToClosestEnemy;
+        }
+
+        public class Path
+        {
+            public UnitModel FromUnitModel { get; private set; }
+            public UnitModel ToUnitModel { get; private set; }
+            public List<SquareView> SquareViews { get; set; }
+
+            public Path(UnitModel fromUnitModel, 
+                UnitModel toUnitModel, 
+                List<SquareView> squareViews)
             {
-                Debug.Log($"Path for unit is changed from square with coordinates " +
-                          $"{Paths[unitModel][0].Position.x}:{Paths[unitModel][0].Position.y}" +
-                          $" to square with coordinates " +
-                          $"{pathToClosestEnemy[0].Position.x}:{pathToClosestEnemy[0].Position.y}");
+                FromUnitModel = fromUnitModel;
+                ToUnitModel = toUnitModel;
+                SquareViews = squareViews;
             }
-
-            Paths[unitModel] = pathToClosestEnemy;
-
-            PathsChanged.Invoke(Paths);
         }
     }
 }

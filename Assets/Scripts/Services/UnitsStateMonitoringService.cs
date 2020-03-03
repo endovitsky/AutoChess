@@ -59,5 +59,17 @@ namespace Services
         {
             return _aliveUnitModels[teamName];
         }
+
+        public List<UnitModel> GetAliveEnemyUnitModelsForUnitModel(UnitModel unitModel)
+        {
+            return GetAliveEnemyUnitModelsForTeam(unitModel.TeamName);
+        }
+
+        public List<UnitModel> GetAliveEnemyUnitModelsForTeam(string teamName)
+        {
+            var enemyTeamName = GameManager.Instance.TeamsConfigurationService.GetEnemyTeamName(teamName);
+            var enemyUnitModels = GetAliveUnitModelsForTeam(enemyTeamName);
+            return enemyUnitModels;
+        }
     }
 }
