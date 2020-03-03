@@ -24,7 +24,7 @@ namespace Services
                     var path = GameManager.Instance.UnitsPathProvidingService.Paths.FirstOrDefault(x =>
                         x.FromUnitModel == unitModel);
 
-                    // no path from this unit
+                    // no path for this unit
                     if (path == null)
                     {
                         continue;
@@ -32,6 +32,12 @@ namespace Services
 
                     // no next square to move
                     if (path.SquareViews.Count <= 0)
+                    {
+                        continue;
+                    }
+
+                    // reached stack range - no need to move anymore
+                    if (path.SquareViews.Count <= GameManager.Instance.UnitConfigurationService.AttackRange)
                     {
                         continue;
                     }

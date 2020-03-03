@@ -1,4 +1,4 @@
-﻿namespace Services
+namespace Services
 {
     public class UnitConfigurationService
     {
@@ -9,7 +9,7 @@
         {
             // TODO: add receiving this data from json config file
             InitialHealth = 100f;
-            AttackRange = 1f;
+            AttackRange = 0f;
         }
     }
 }
