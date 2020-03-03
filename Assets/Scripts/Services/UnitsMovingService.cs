@@ -38,7 +38,7 @@ namespace Services
 
                     var squareView = path.SquareViews[0];
 
-                    unitModel.Move(squareView);
+                    unitModel.Move(squareView.Position);
                 }
             }
         }

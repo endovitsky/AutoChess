@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Extensions;
 using Managers;
 using Models;
 using UnityEngine;
@@ -41,7 +42,7 @@ namespace Services
                 {
                     RecalculatePath(unitModel, enemyUnitModels);
 
-                    unitModel.SquareViewChanged += squareView =>
+                    unitModel.PositionChanged += squareView =>
                     {
                         // recalculate my paths to enemies
                         RecalculatePath(unitModel, enemyUnitModels);
@@ -77,17 +78,30 @@ namespace Services
         private Path FindPathToClosestEnemy(UnitModel unitModel, List<UnitModel> enemyUnitModels)
         {
             var enemySquareViews = new List<SquareView>();
-            enemyUnitModels.ForEach(x => enemySquareViews.Add(x.SquareView));
+            foreach (var enemyUnitModel in enemyUnitModels)
+            {
+                var squareViewForEnemyUnitModel = enemyUnitModel.GetSquareViewForUnitModel();
+                enemySquareViews.Add(squareViewForEnemyUnitModel);
+            }
 
+            var squareViewForUnitModel = unitModel.GetSquareViewForUnitModel();
             var closestPath = GameManager.Instance.PathFindingService.FindClosestPath(
-                unitModel.SquareView, enemySquareViews);
+                squareViewForUnitModel, enemySquareViews);
 
             var squareUnderUnit = closestPath[0];
             var squareUnderEnemyUnit = closestPath[closestPath.Count - 1];
             closestPath = closestPath.Where(x => x != squareUnderUnit).ToList();
             closestPath = closestPath.Where(x => x != squareUnderEnemyUnit).ToList();
-            var unit = squareUnderUnit.UnitView.UnitModel;
-            var enemyUnit = squareUnderEnemyUnit.UnitView.UnitModel;
+
+            var unit = squareUnderUnit.GetUnitModelForSquareView();
+            var enemyUnit = squareUnderEnemyUnit.GetUnitModelForSquareView();
+
+            if (unit == null ||
+                enemyUnit == null)
+            {
+                int a = 0;
+                a++;
+            }
 
             var pathToClosestEnemy = new Path(unit, enemyUnit, closestPath);
 

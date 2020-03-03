@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Managers;
 using Models;
 using UnityEngine;
@@ -58,15 +59,13 @@ namespace Factories
         {
             UnitView instance = null;
 
-            instance = Instantiate(_unitViewPrefab, squareView.gameObject.transform);
+            instance = Instantiate(_unitViewPrefab, squareView.gameObject.transform.parent);
 
             instance.Initialize(new UnitModel(
                 GameManager.Instance.UnitConfigurationService.InitialHealth,
                 teamName,
-                squareView,
+                squareView.Position,
                 instance));
-
-            squareView.UnitView = instance;
 
             _teamUnitViewInstances[teamName].Add(instance);
             GameManager.Instance.UnitsCountService.IncreaseUnitsCountForTeam(teamName);
@@ -74,6 +73,27 @@ namespace Factories
 
             instance.gameObject.GetComponent<SpriteRenderer>().sprite =
                 GameManager.Instance.TexturesResourcesManager.Get("Units", teamName);
+        }
+
+        //TODO: move this method to more correct place
+        public UnitView GetUnitViewByPosition(Vector2 position)
+        {
+            UnitView result = null;
+
+            foreach (var keyValuePair in _teamUnitViewInstances)
+            {
+                foreach (var unitView in keyValuePair.Value)
+                {
+                    var floatComparisonTolerance = 0.001f;
+                    if (Math.Abs(unitView.gameObject.transform.localPosition.x - position.x) < floatComparisonTolerance &&
+                        Math.Abs(unitView.gameObject.transform.localPosition.y - position.y) < floatComparisonTolerance)
+                    {
+                        return unitView;
+                    }
+                }
+            }
+
+            return result;
         }
     }
 }

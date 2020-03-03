@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Managers;
 using UnityEngine;
 using Views;
@@ -38,6 +39,27 @@ namespace Factories
             var position = new Vector3(indexX + 1, indexY + 1); // from indexes to coordinates
             instance.gameObject.transform.localPosition = position;
             return instance;
+        }
+
+        //TODO: move this method to more correct place
+        public SquareView GetSquareViewByPosition(Vector2 position)
+        {
+            SquareView result = null;
+
+            foreach (var squareViews in SquareInstances)
+            {
+                foreach (var squareView in squareViews)
+                {
+                    var floatComparisonTolerance = 0.001f;
+                    if (Math.Abs(squareView.gameObject.transform.localPosition.x - position.x) < floatComparisonTolerance &&
+                        Math.Abs(squareView.gameObject.transform.localPosition.y - position.y) < floatComparisonTolerance)
+                    {
+                        return squareView;
+                    }
+                }
+            }
+
+            return result;
         }
     }
 }

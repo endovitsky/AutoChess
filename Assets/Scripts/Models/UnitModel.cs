@@ -7,7 +7,7 @@ namespace Models
     public class UnitModel
     {
         public Action<float> HealthChanged = delegate { };
-        public Action<SquareView> SquareViewChanged = delegate { };
+        public Action<Vector2> PositionChanged = delegate { };
 
         public float Health
         {
@@ -33,47 +33,37 @@ namespace Models
 
         public string TeamName { get; private set; }
 
-        public SquareView SquareView
+        public Vector2 Position
         {
             get
             {
-                return _squareView;
+                return _position;
             }
             private set
             {
-                if (_squareView != null &&
+                if (_position != null &&
                     value != null)
                 {
-                    Debug.Log($"Unit moved from square with coordinates {_squareView.Position.x}:{_squareView.Position.y}" +
-                              $" to square with coordinates {value.Position.x}:{value.Position.y}");
+                    Debug.Log($"Unit moved from square with coordinates {_position.x}:{_position.y}" +
+                              $" to square with coordinates {value.x}:{value.y}");
                 }
 
-                // need to update square too
-                if (_squareView != null)
-                {
-                    _squareView.UnitView = null;
-                }
-                if (value != null)
-                {
-                    value.UnitView = this.UnitView;
-                }
+                _position = value;
 
-                _squareView = value;
-
-                SquareViewChanged.Invoke(_squareView);
+                PositionChanged.Invoke(_position);
             }
         }
 
         public UnitView UnitView;
 
         private float _health;
-        private SquareView _squareView;
+        private Vector2 _position;
 
-        public UnitModel(float health, string teamName, SquareView squareView, UnitView unitView)
+        public UnitModel(float health, string teamName, Vector2 position, UnitView unitView)
         {
             Health = health;
             TeamName = teamName;
-            SquareView = squareView;
+            Position = position;
             UnitView = unitView;
         }
 
@@ -82,9 +72,9 @@ namespace Models
             Health -= amount;
         }
 
-        public void Move(SquareView squareView)
+        public void Move(Vector2 position)
         {
-            SquareView = squareView;
+            Position = position;
         }
     }
 }

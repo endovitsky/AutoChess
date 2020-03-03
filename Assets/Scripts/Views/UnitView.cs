@@ -11,14 +11,16 @@ namespace Views
         {
             UnitModel = unitModel;
 
-            SquareViewChanged(UnitModel.SquareView);
-            UnitModel.SquareViewChanged += SquareViewChanged;
+            PositionChanged(UnitModel.Position);
+            UnitModel.PositionChanged += PositionChanged;
         }
 
-        private void SquareViewChanged(SquareView squareView)
+        private void PositionChanged(Vector2 position)
         {
-            this.gameObject.transform.parent = squareView.gameObject.transform;
-            this.gameObject.transform.localPosition = new Vector3(0, 0, this.gameObject.transform.localPosition.z);
+            this.gameObject.transform.localPosition = new Vector3(
+                position.x, 
+                position.y, 
+                this.gameObject.transform.localPosition.z);
         }
     }
 }
