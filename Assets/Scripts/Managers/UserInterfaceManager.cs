@@ -6,8 +6,11 @@ namespace Managers
     {
         [SerializeField]
         private RectTransform _startBattleWindowPrefab;
+        [SerializeField]
+        private RectTransform _gameOverWindowPrefab;
 
         private RectTransform _startBattleWindowInstance;
+        private RectTransform _gameOverWindowInstance;
 
         public void Initialize()
         {
@@ -20,6 +23,7 @@ namespace Managers
             }
 
             _startBattleWindowInstance = Instantiate(_startBattleWindowPrefab, canvas.gameObject.transform);
+            _gameOverWindowInstance = Instantiate(_gameOverWindowPrefab, canvas.gameObject.transform);
         }
     }
 }
