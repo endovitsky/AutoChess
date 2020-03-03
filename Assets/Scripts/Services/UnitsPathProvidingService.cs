@@ -27,51 +27,50 @@ namespace Services
             }
 
             RecalculatePaths();
+
+            // subscribe to movement of each unit to recalculate all paths
+            // TODO: not optimal - fix it
+            foreach (var teamName in GameManager.Instance.TeamsConfigurationService.TeamNames)
+            {
+                var unitModels = GameManager.Instance.UnitsStateMonitoringService.GetAliveUnitModelsForTeam(teamName);
+                foreach (var unitModel in unitModels)
+                {
+                    unitModel.SquareViewChanged += squareView =>
+                    {
+                        RecalculatePaths();
+                    };
+                }
+            }
         }
 
         private void RecalculatePaths()
         {
             foreach (var teamName in GameManager.Instance.TeamsConfigurationService.TeamNames)
             {
-                var enemyUnitModels = GameManager.Instance.UnitsStateMonitoringService.GetAliveEnemyUnitModelsForTeam(teamName);
-
                 var unitModels = GameManager.Instance.UnitsStateMonitoringService.GetAliveUnitModelsForTeam(teamName);
                 foreach (var unitModel in unitModels)
                 {
-                    RecalculatePath(unitModel, enemyUnitModels);
-
-                    unitModel.SquareViewChanged += squareView =>
-                    {
-                        // recalculate unit paths to enemies
-                        RecalculatePath(unitModel, enemyUnitModels);
-
-                        // enemies have their own paths to this unit - recalculate them too
-                        var pathsFromEnemyUnitsToUnit = Paths.Where(x=>x.ToUnitModel == unitModel);
-                        foreach (var pathsFromEnemyUnitToUnit in pathsFromEnemyUnitsToUnit)
-                        {
-                            var enemyUnitModel = pathsFromEnemyUnitToUnit.FromUnitModel;
-
-                            var enemiesOfMyEnemy = GameManager.Instance.UnitsStateMonitoringService.GetAliveEnemyUnitModelsForUnitModel(enemyUnitModel);
-
-                            RecalculatePath(enemyUnitModel, enemiesOfMyEnemy);
-                        }
-                    };
+                    RecalculatePath(unitModel);
                 }
             }
         }
 
-        private void RecalculatePath(UnitModel unitModel, List<UnitModel> enemyUnitModels)
+        private void RecalculatePath(UnitModel unitModel)
         {
+            var enemyUnitModels =
+                GameManager.Instance.UnitsStateMonitoringService.GetAliveEnemyUnitModelsForUnitModel(unitModel);
+
+
             var pathToClosestEnemy = FindPathToClosestEnemy(unitModel, enemyUnitModels);
 
-            var path = Paths.FirstOrDefault(x => x.FromUnitModel == pathToClosestEnemy.FromUnitModel && 
-                                                 x.ToUnitModel == pathToClosestEnemy.ToUnitModel);
+            var oldPathForThisUnitModel = Paths.FirstOrDefault(x => x.FromUnitModel == unitModel);
 
             //TODO: add path changed logging here
 
-            if (path!= null) // contains path for this pair of units - update path
+            if (oldPathForThisUnitModel!= null) // contains path for this pair of units - update path
             {
-                path.SquareViews = pathToClosestEnemy.SquareViews;
+                oldPathForThisUnitModel.ToUnitModel = pathToClosestEnemy.ToUnitModel;
+                oldPathForThisUnitModel.SquareViews = pathToClosestEnemy.SquareViews;
             }
             else // do not contains path for this pair of units - add path
             {
@@ -104,7 +103,7 @@ namespace Services
         public class Path
         {
             public UnitModel FromUnitModel { get; private set; }
-            public UnitModel ToUnitModel { get; private set; }
+            public UnitModel ToUnitModel { get; set; }
             public List<SquareView> SquareViews { get; set; }
 
             public Path(UnitModel fromUnitModel, 
