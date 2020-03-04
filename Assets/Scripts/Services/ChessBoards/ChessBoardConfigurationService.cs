@@ -1,4 +1,4 @@
-﻿namespace Services
+﻿namespace Services.ChessBoards
 {
     public class ChessBoardConfigurationService
     {
