@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace Services
+namespace Services.Teams
 {
     public class TeamsConfigurationService
     {
