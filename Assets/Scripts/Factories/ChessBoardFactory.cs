@@ -1,4 +1,4 @@
-﻿using Managers;
+using Managers;
 using UnityEngine;
 using Views;
 
@@ -7,13 +7,13 @@ namespace Factories
     public class ChessBoardFactory : MonoBehaviour
     {
         [SerializeField]
-        private ChessBoardView chessBoardViewPrefab;
+        private ChessBoardView _chessBoardViewPrefab;
 
         private ChessBoardView _chessBoardViewInstance;
 
         public void InstantiateChessBoard(Transform parent)
         {
-            _chessBoardViewInstance = Instantiate(chessBoardViewPrefab, parent);
+            _chessBoardViewInstance = Instantiate(_chessBoardViewPrefab, parent);
 
             // set board position to center of parent container
             var xCorrection = GameManager.Instance.ChessBoardConfigurationService.Width / 2 +

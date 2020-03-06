@@ -90,7 +90,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d10b165816146cca8b2f8c115b33aaa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  chessBoardViewPrefab: {fileID: -5662394287260000611, guid: 6ceb1c712cf441d49ad75c9f32e1cf88,
+  _chessBoardViewPrefab: {fileID: -5662394287260000611, guid: 6ceb1c712cf441d49ad75c9f32e1cf88,
     type: 3}
 --- !u!114 &6071225738948367080
 MonoBehaviour:
