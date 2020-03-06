@@ -114,8 +114,6 @@ namespace Managers
             UnitConfigurationService.Initialize();
             GameStateService.Initialize();
             UnitsCountService.Initialize();
-            // UnitsStateMonitoringService need TeamsConfigurationService
-            UnitsStateMonitoringService.Initialize();
             // TeamsStateMonitoringService on Initialize need
             //     UnitsStateMonitoringService
             // TeamsStateMonitoringService need

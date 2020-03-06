@@ -17,53 +17,42 @@ namespace Services.Units
             get { return UnitModels.Where(x => !x.IsDead).ToList(); }
         }
 
-        private Dictionary<string, List<UnitModel>> _teamAliveUnitModels = new Dictionary<string, List<UnitModel>>();
-
-        public void Initialize()
-        {
-            // by default the count of alive units for all teams is 0
-            foreach (var teamName in GameManager.Instance.TeamsConfigurationService.TeamNames)
-            {
-                _teamAliveUnitModels.Add(teamName, new List<UnitModel>());
-            }
-        }
-
         public void RegisterUnitForStateMonitoring(UnitModel unitModel)
         {
             UnitModels.Add(unitModel);
 
             if (!unitModel.IsDead)
             {
-                var previousCount = _teamAliveUnitModels[unitModel.TeamName].Count;
-                _teamAliveUnitModels[unitModel.TeamName].Add(unitModel);
-                var currentCount = _teamAliveUnitModels[unitModel.TeamName].Count;
-
-                Debug.Log($"Alive unit models count of {unitModel.TeamName} team " +
-                          $"changed from {previousCount} to {currentCount}");
-
-                AliveUnitModelsCountChanged.Invoke(_teamAliveUnitModels.Count);
+                OnIsDeadChanged(unitModel);
             }
 
             unitModel.HealthChanged += health =>
             {
                 if (unitModel.IsDead)
                 {
-                    var previousCount = _teamAliveUnitModels[unitModel.TeamName].Count;
-                    _teamAliveUnitModels[unitModel.TeamName].Remove(unitModel);
-                    var currentCount = _teamAliveUnitModels[unitModel.TeamName].Count;
-
-                    Debug.Log($"Alive unit models count of {unitModel.TeamName} team " +
-                              $"changed from {previousCount} to {currentCount}");
-
-                    AliveUnitModelsCountChanged.Invoke(_teamAliveUnitModels.Count);
+                    OnIsDeadChanged(unitModel);
                 }
             };
+        }
+
+        private void OnIsDeadChanged(UnitModel unitModel)
+        {
+            var previousCount = GetAliveUnitModelsForTeam(unitModel.TeamName).Count;
+            var currentCount = GetAliveUnitModelsForTeam(unitModel.TeamName).Count;
+
+            Debug.Log($"Alive unit models count of {unitModel.TeamName} team " +
+                      $"changed from {previousCount} to {currentCount}");
+
+            AliveUnitModelsCountChanged.Invoke(AliveUnitModels.Count);
         }
 
         // TODO: move to more correct place
         public List<UnitModel> GetAliveUnitModelsForTeam(string teamName)
         {
-            return _teamAliveUnitModels[teamName];
+            var unitModels = UnitModels.Where(x=>x.IsDead == false && 
+                                                 x.TeamName == teamName).ToList();
+
+            return unitModels;
         }
 
         public List<UnitModel> GetAliveEnemyUnitModelsForUnitModel(UnitModel unitModel)
