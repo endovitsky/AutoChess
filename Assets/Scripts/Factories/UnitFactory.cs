@@ -12,16 +12,10 @@ namespace Factories
         [SerializeField]
         private UnitView _unitViewPrefab;
 
-        private Dictionary<string, List<UnitView>> _teamUnitViewInstances = new Dictionary<string, List<UnitView>>();
+        private List<UnitView> _unitViewInstances = new List<UnitView>();
 
         public void Initialize()
         {
-            // by default there is no instances of units of any team
-            foreach (var teamName in GameManager.Instance.TeamsConfigurationService.TeamNames)
-            {
-                _teamUnitViewInstances.Add(teamName, new List<UnitView>());
-            }
-
             SelectedGameStateChanged(GameManager.Instance.GameStateService.SelectedGameState);
             GameManager.Instance.GameStateService.SelectedGameStateChanged += SelectedGameStateChanged;
         }
@@ -73,7 +67,7 @@ namespace Factories
 
             squareView.UnitView = instance;
 
-            _teamUnitViewInstances[teamName].Add(instance);
+            _unitViewInstances.Add(instance);
             GameManager.Instance.UnitsCountService.IncreaseUnitsCountForTeam(teamName);
             GameManager.Instance.UnitsStateMonitoringService.RegisterUnitForStateMonitoring(instance.UnitModel);
 
@@ -83,22 +77,21 @@ namespace Factories
 
         public void DestroyUnit(UnitView unitView)
         {
-            foreach (var keyValuePair in _teamUnitViewInstances)
+            var unitViewInstancesForDestroying = new List<UnitView>();
+
+            foreach (var unitViewInstance in _unitViewInstances)
             {
-                foreach (var unitViewInstance in keyValuePair.Value)
+                if (unitViewInstance == unitView)
                 {
-                    if (unitViewInstance == unitView)
-                    {
-                        Destroy(unitViewInstance.gameObject);
-
-                        keyValuePair.Value.Remove(unitViewInstance);
-                    }
+                    unitViewInstancesForDestroying.Add(unitViewInstance);
                 }
+            }
 
-                if (keyValuePair.Value.Count == 0)
-                {
-                    _teamUnitViewInstances.Remove(keyValuePair.Key);
-                }
+            foreach (var unitViewInstanceForDestroying in unitViewInstancesForDestroying)
+            {
+                _unitViewInstances.Remove(unitViewInstanceForDestroying);
+
+                Destroy(unitViewInstanceForDestroying.gameObject);
             }
         }
 
@@ -109,15 +102,12 @@ namespace Factories
                 return;
             }
 
-            foreach (var keyValuePair in _teamUnitViewInstances)
+            foreach (var unitView in _unitViewInstances)
             {
-                foreach (var unitView in keyValuePair.Value)
-                {
-                    Destroy(unitView.gameObject);
-                }
+                Destroy(unitView.gameObject);
             }
 
-            _teamUnitViewInstances.Clear();
+            _unitViewInstances.Clear();
         }
     }
 }
