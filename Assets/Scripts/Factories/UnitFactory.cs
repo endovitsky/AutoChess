@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Managers;
 using Models;
 using UnityEngine;
@@ -75,6 +75,27 @@ namespace Factories
 
             instance.gameObject.GetComponent<SpriteRenderer>().sprite =
                 GameManager.Instance.TexturesResourcesManager.Get("Units", teamName);
+        }
+
+        public void DestroyUnit(UnitView unitView)
+        {
+            foreach (var keyValuePair in _teamUnitViewInstances)
+            {
+                foreach (var unitViewInstance in keyValuePair.Value)
+                {
+                    if (unitViewInstance == unitView)
+                    {
+                        Destroy(unitViewInstance.gameObject);
+
+                        keyValuePair.Value.Remove(unitViewInstance);
+                    }
+                }
+
+                if (keyValuePair.Value.Count == 0)
+                {
+                    _teamUnitViewInstances.Remove(keyValuePair.Key);
+                }
+            }
         }
     }
 }
