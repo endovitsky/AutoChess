@@ -1,6 +1,7 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Managers;
 using Models;
+using Services;
 using UnityEngine;
 using Views;
 
@@ -20,6 +21,9 @@ namespace Factories
             {
                 _teamUnitViewInstances.Add(teamName, new List<UnitView>());
             }
+
+            SelectedGameStateChanged(GameManager.Instance.GameStateService.SelectedGameState);
+            GameManager.Instance.GameStateService.SelectedGameStateChanged += SelectedGameStateChanged;
         }
 
         public void TryInstantiateUnit(SquareView squareView)
@@ -96,6 +100,24 @@ namespace Factories
                     _teamUnitViewInstances.Remove(keyValuePair.Key);
                 }
             }
+        }
+
+        private void SelectedGameStateChanged(GameStateService.GameState gameState)
+        {
+            if (gameState != GameStateService.GameState.NotStarted)
+            {
+                return;
+            }
+
+            foreach (var keyValuePair in _teamUnitViewInstances)
+            {
+                foreach (var unitView in keyValuePair.Value)
+                {
+                    Destroy(unitView.gameObject);
+                }
+            }
+
+            _teamUnitViewInstances.Clear();
         }
     }
 }

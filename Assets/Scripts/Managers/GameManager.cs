@@ -98,7 +98,14 @@ namespace Managers
             UnitsFightingService = new UnitsFightingService();
 
             TeamsConfigurationService.Initialize();
-            // UnitFactory need TeamsConfigurationService
+            // SquareFactory on Initialize need
+            //     GameStateService
+            // SquareFactory need
+            //     ChessBoardConfigurationService
+            SquareFactory.Initialize();
+            // UnitFactory on Initialize need
+            //     TeamsConfigurationService
+            //     GameStateService
             UnitFactory.Initialize();
 
             TimerService.Initialize();
@@ -128,8 +135,8 @@ namespace Managers
             //     UnitsPathProvidingService
             UnitsFightingService.Initialize();
             // GameObjectsManager need ChessBoardConfigurationService
-            GameObjectsManager.Initialize();
             UserInterfaceManager.Initialize();
+            GameObjectsManager.Initialize();
             TexturesResourcesManager.Initialize("Textures");
         }
     }
