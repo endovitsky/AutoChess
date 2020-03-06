@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Components.SetterComponents
+namespace Components
 {
     public class CanvasMainCameraSetterComponent : MonoBehaviour
     {
