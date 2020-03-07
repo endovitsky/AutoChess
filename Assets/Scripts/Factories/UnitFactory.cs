@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Managers;
 using Models;
 using Services;
@@ -9,6 +10,9 @@ namespace Factories
 {
     public class UnitFactory : MonoBehaviour
     {
+        public Action<UnitModel> UnitInstantiated = delegate { };
+        public Action<UnitModel> UnitDestroyed = delegate { };
+
         [SerializeField]
         private UnitView _unitViewPrefab;
 
@@ -69,7 +73,7 @@ namespace Factories
 
             _unitViewInstances.Add(instance);
             GameManager.Instance.UnitsCountService.IncreaseUnitsCountForTeam(teamName);
-            GameManager.Instance.UnitsStateMonitoringService.RegisterUnitForStateMonitoring(instance.UnitModel);
+            UnitInstantiated.Invoke(instance.UnitModel);
 
             instance.gameObject.GetComponent<SpriteRenderer>().sprite =
                 GameManager.Instance.TexturesResourcesManager.Get("Units", teamName);
@@ -90,6 +94,7 @@ namespace Factories
             foreach (var unitViewInstanceForDestroying in unitViewInstancesForDestroying)
             {
                 _unitViewInstances.Remove(unitViewInstanceForDestroying);
+                UnitDestroyed.Invoke(unitViewInstanceForDestroying.UnitModel);
 
                 Destroy(unitViewInstanceForDestroying.gameObject);
             }
