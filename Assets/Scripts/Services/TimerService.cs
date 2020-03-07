@@ -22,6 +22,8 @@ namespace Services
                     return;
                 }
 
+                Debug.Log($"Seconds passed count changed from {_secondsPassedCount} to {value}");
+
                 _secondsPassedCount = value;
 
                 SecondsPassedCountChanged.Invoke(_secondsPassedCount);
@@ -34,7 +36,25 @@ namespace Services
 
         public void Initialize()
         {
-            _timer = GameManager.Instance.StartCoroutine(SecondCounting());
+            GameManager.Instance.GameStateService.SelectedGameStateChanged += SelectedGameStateChanged;
+        }
+
+        private void SelectedGameStateChanged(GameStateService.GameState gameState)
+        {
+            if (gameState == GameStateService.GameState.NotStarted)
+            {
+                // clear
+                if (_timer != null)
+                {
+                    GameManager.Instance.StopCoroutine(_timer);
+                    _timer = null;
+
+                    SecondsPassedCount = 0;
+                }
+
+                // init
+                _timer = GameManager.Instance.StartCoroutine(SecondCounting());
+            }
         }
 
         private IEnumerator SecondCounting()
