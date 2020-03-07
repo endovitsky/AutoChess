@@ -14,7 +14,7 @@ namespace Managers
 
         public void Initialize()
         {
-            var canvas = FindObjectOfType<Canvas>();
+            var canvas = GameObject.Find("UserInterfaceCanvas").GetComponent<Canvas>();
             if (canvas == null)
             {
                 Debug.LogError("No canvas vas found in scene");
