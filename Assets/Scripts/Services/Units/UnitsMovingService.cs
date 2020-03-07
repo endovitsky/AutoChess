@@ -7,6 +7,9 @@ namespace Services.Units
     {
         public void Initialize()
         {
+            // uninit
+            GameManager.Instance.TimerService.SecondsPassedCountChanged -= OnSecondsPassedCountChanged;
+            // init
             GameManager.Instance.TimerService.SecondsPassedCountChanged += OnSecondsPassedCountChanged;
         }
 
