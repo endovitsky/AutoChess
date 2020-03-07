@@ -20,44 +20,49 @@ namespace Services.Units
 
         private void OnSelectedGameStateChanged(GameStateService.GameState gameState)
         {
-            if (gameState != GameStateService.GameState.Started)
+            // clear
+            if (gameState == GameStateService.GameState.NotStarted)
             {
-                return;
+                Paths.Clear();
             }
 
-            RecalculatePaths();
-
-            // subscribe to state changing of each unit to recalculate all paths
-            // TODO: not optimal - fix it
-            foreach (var unitModel in GameManager.Instance.UnitsStateMonitoringService.UnitModels)
+            // initialize
+            if (gameState == GameStateService.GameState.Started)
             {
-                unitModel.SquareViewChanged += squareView =>
+                RecalculatePaths();
+
+                // subscribe to state changing of each unit to recalculate all paths
+                // TODO: not optimal - fix it
+                foreach (var unitModel in GameManager.Instance.UnitsStateMonitoringService.UnitModels)
                 {
-                    RecalculatePaths();
-                };
-                unitModel.HealthChanged += health =>
-                {
-                    if (unitModel.IsDead)
+                    unitModel.SquareViewChanged += squareView =>
                     {
-                        // remove paths from dead units
-                        var pathFromDeadUnitModel = Paths.FirstOrDefault(x=>x.FromUnitModel == unitModel);
-                        if (pathFromDeadUnitModel == null)
+                        RecalculatePaths();
+                    };
+                    unitModel.HealthChanged += health =>
+                    {
+                        if (unitModel.IsDead)
                         {
-                            //
-                        }
-                        Paths.Remove(pathFromDeadUnitModel);
+                            // remove paths from dead units
+                            var pathFromDeadUnitModel = Paths.FirstOrDefault(x => x.FromUnitModel == unitModel);
+                            if (pathFromDeadUnitModel == null)
+                            {
+                                //
+                            }
+                            Paths.Remove(pathFromDeadUnitModel);
 
-                        // remove destination point to dead units
-                        var pathsToDeadUnitModel = Paths.Where(x => x.ToUnitModel == unitModel).ToList();
-                        foreach (var pathToDeadUnitModel in pathsToDeadUnitModel)
-                        {
-                            pathToDeadUnitModel.ToUnitModel = null;
+                            // remove destination point to dead units
+                            var pathsToDeadUnitModel = Paths.Where(x => x.ToUnitModel == unitModel).ToList();
+                            foreach (var pathToDeadUnitModel in pathsToDeadUnitModel)
+                            {
+                                pathToDeadUnitModel.ToUnitModel = null;
+                            }
                         }
-                    }
-                    // TODO: add reaction for not dead unit - resurrected
+                        // TODO: add reaction for not dead unit - resurrected
 
-                    RecalculatePaths();
-                };
+                        RecalculatePaths();
+                    };
+                }
             }
         }
 
