@@ -1,4 +1,4 @@
-﻿using Factories;
+using Factories;
 using Managers.ResourcesManagers;
 using Services;
 using Services.ChessBoards;
@@ -98,6 +98,12 @@ namespace Managers
             UnitsFightingService = new UnitsFightingService();
 
             TeamsConfigurationService.Initialize();
+            ChessBoardConfigurationService.Initialize();
+            // ChessBoardFactory on Initialize need
+            //     GameStateService
+            // ChessBoardFactory need
+            //     ChessBoardConfigurationService
+            ChessBoardFactory.Initialize();
             // SquareFactory on Initialize need
             //     GameStateService
             // SquareFactory need
@@ -109,7 +115,7 @@ namespace Managers
             UnitFactory.Initialize();
 
             TimerService.Initialize();
-            ChessBoardConfigurationService.Initialize();
+
             UnitsSpawningConfigurationService.Initialize();
             UnitConfigurationService.Initialize();
             GameStateService.Initialize();

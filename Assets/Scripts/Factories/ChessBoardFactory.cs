@@ -1,4 +1,5 @@
-using Managers;
+﻿using Managers;
+using Services;
 using UnityEngine;
 using Views;
 
@@ -11,20 +12,29 @@ namespace Factories
 
         private ChessBoardView _chessBoardViewInstance;
 
-        public void InstantiateChessBoard(Transform parent)
+        public void Initialize()
         {
-            _chessBoardViewInstance = Instantiate(_chessBoardViewPrefab, parent);
+            //SelectedGameStateChanged(GameManager.Instance.GameStateService.SelectedGameState);
+            GameManager.Instance.GameStateService.SelectedGameStateChanged += SelectedGameStateChanged;
+        }
 
-            // set board position to center of parent container
-            var xCorrection = GameManager.Instance.ChessBoardConfigurationService.Width / 2 +
-                              GameManager.Instance.SquareFactory.SquareSize.x / 2;
-            var yCorrection = GameManager.Instance.ChessBoardConfigurationService.Height / 2 +
-                              GameManager.Instance.SquareFactory.SquareSize.y / 2;
-            _chessBoardViewInstance.gameObject.transform.localPosition = new Vector3(
-                _chessBoardViewInstance.gameObject.transform.localPosition.x - xCorrection,
-                _chessBoardViewInstance.gameObject.transform.localPosition.y - yCorrection);
+        private void SelectedGameStateChanged(GameStateService.GameState gameState)
+        {
+            if (gameState != GameStateService.GameState.NotStarted)
+            {
+                return;
+            }
 
-            _chessBoardViewInstance.Initialize();
+            // clear
+            if (_chessBoardViewInstance != null)
+            {
+                Destroy(_chessBoardViewInstance.gameObject);
+
+                _chessBoardViewInstance = null;
+            }
+
+            // instantiate
+            _chessBoardViewInstance = Instantiate(_chessBoardViewPrefab, GameManager.Instance.transform);
         }
     }
 }
