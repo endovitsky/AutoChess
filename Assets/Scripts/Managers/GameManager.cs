@@ -1,4 +1,4 @@
-using Factories;
+﻿using Factories;
 using Managers.ResourcesManagers;
 using Services;
 using Services.ChessBoards;
@@ -120,6 +120,10 @@ namespace Managers
             UnitConfigurationService.Initialize();
             GameStateService.Initialize();
             UnitsCountService.Initialize();
+            // UnitsStateMonitoringService on Initialize need
+            //     GameStateService
+            //     UnitFactory
+            UnitsStateMonitoringService.Initialize();
             // TeamsStateMonitoringService on Initialize need
             //     UnitsStateMonitoringService
             // TeamsStateMonitoringService need
@@ -140,7 +144,6 @@ namespace Managers
             UnitsFightingService.Initialize();
             // GameObjectsManager need ChessBoardConfigurationService
             UserInterfaceManager.Initialize();
-            GameObjectsManager.Initialize();
             TexturesResourcesManager.Initialize("Textures");
         }
     }

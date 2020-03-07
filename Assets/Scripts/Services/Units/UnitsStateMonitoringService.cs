@@ -17,7 +17,35 @@ namespace Services.Units
             get { return UnitModels.Where(x => !x.IsDead).ToList(); }
         }
 
-        public void RegisterUnitForStateMonitoring(UnitModel unitModel)
+        public void Initialize()
+        {
+            // clear
+            OnSelectedGameStateChanged(GameManager.Instance.GameStateService.SelectedGameState);
+            GameManager.Instance.GameStateService.SelectedGameStateChanged += OnSelectedGameStateChanged;
+
+            // init
+            GameManager.Instance.UnitFactory.UnitInstantiated += OnUnitInstantiated;
+            GameManager.Instance.UnitFactory.UnitDestroyed += OnUnitDestroyed;
+        }
+
+        private void OnSelectedGameStateChanged(GameStateService.GameState gameState)
+        {
+            if (gameState == GameStateService.GameState.NotStarted)
+            {
+                UnitModels.Clear();
+            }
+        }
+
+        private void OnUnitInstantiated(UnitModel unitModel)
+        {
+            RegisterUnitForStateMonitoring(unitModel);
+        }
+        private void OnUnitDestroyed(UnitModel unitModel)
+        {
+            UnRegisterUnitForStateMonitoring(unitModel);
+        }
+
+        private void RegisterUnitForStateMonitoring(UnitModel unitModel)
         {
             UnitModels.Add(unitModel);
 
@@ -33,6 +61,10 @@ namespace Services.Units
                     OnIsDeadChanged(unitModel);
                 }
             };
+        }
+        private void UnRegisterUnitForStateMonitoring(UnitModel unitModel)
+        {
+            UnitModels.Remove(unitModel);
         }
 
         private void OnIsDeadChanged(UnitModel unitModel)
@@ -54,12 +86,10 @@ namespace Services.Units
 
             return unitModels;
         }
-
         public List<UnitModel> GetAliveEnemyUnitModelsForUnitModel(UnitModel unitModel)
         {
             return GetAliveEnemyUnitModelsForTeam(unitModel.TeamName);
         }
-
         public List<UnitModel> GetAliveEnemyUnitModelsForTeam(string teamName)
         {
             var enemyTeamName = GameManager.Instance.TeamsConfigurationService.GetEnemyTeamName(teamName);
