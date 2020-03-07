@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Linq;
-using Managers;
 using UnityEngine;
 
 namespace Services
@@ -14,10 +12,10 @@ namespace Services
             get => _selectedGameState;
             set
             {
-                if (value == _selectedGameState)
-                {
-                    return;
-                }
+                //if (value == _selectedGameState)
+                //{
+                //    return;
+                //}
 
                 Debug.Log($"Selected game state changed from {_selectedGameState} to {value}");
 
