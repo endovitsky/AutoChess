@@ -55,7 +55,6 @@ namespace Factories
 
             InstantiateUnit(squareView, teamName);
         }
-
         public void InstantiateUnit(SquareView squareView, string teamName)
         {
             UnitView instance = null;
@@ -72,13 +71,11 @@ namespace Factories
             squareView.UnitView = instance;
 
             _unitViewInstances.Add(instance);
-            GameManager.Instance.UnitsCountService.IncreaseUnitsCountForTeam(teamName);
             UnitInstantiated.Invoke(instance.UnitModel);
 
             instance.gameObject.GetComponent<SpriteRenderer>().sprite =
                 GameManager.Instance.TexturesResourcesManager.Get("Units", teamName);
         }
-
         public void DestroyUnit(UnitView unitView)
         {
             var unitViewInstancesForDestroying = new List<UnitView>();
